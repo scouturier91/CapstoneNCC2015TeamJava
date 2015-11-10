@@ -8,6 +8,7 @@ package Minotaur;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
 import javax.swing.JFrame;
@@ -15,38 +16,19 @@ import javax.swing.JFrame;
  *
  * @author mrswe_000
  */
-public class Minotaur extends JFrame 
-{
-    
-    public Minotaur()
-    {
-        startUI();
-    }
-    
+public class Minotaur
+{   
     public static void main(String[] args) 
     {
-	EventQueue.invokeLater(new Runnable() 
-        {
-
-            @Override
-            public void run()
-            {
-                Minotaur min = new Minotaur();
-                min.setVisible(true);
-            }
-        });
+	Frame game  = new Frame("Minotaur");
+        
+        Model world = new Model();
+        Grid screen = new Grid(world);
+        
+        game.add(screen);
+        game.pack();
+        game.setVisible(true);
 
     }    
-
-        
-    public void startUI()
-    {
-        add(new Grid());
-        setTitle("Minotaur 0.1");
-        setSize(500, 500);
-        setBackground(Color.YELLOW);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
-    }
     
 }
