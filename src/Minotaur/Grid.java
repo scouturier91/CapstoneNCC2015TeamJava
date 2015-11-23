@@ -12,20 +12,20 @@ import java.io.File;
 
 public class Grid extends JPanel implements ActionListener {
 
-    private Dimension dim;
     //images for the hero and minotaur 
     private Image hero;
     private Image minotaur;
 
-    private final int blockSize = 40;
-    private final int numOfBlocks = 9;
-    private final int screenSize = numOfBlocks * blockSize;
+    private static final int blockSize = 40;
+    private static final int numOfBlocks = 9;
+    public static final int screenSize = numOfBlocks * blockSize;
 
     //checks to see whether the hero is still alive
     private boolean dying = false;
     private boolean inGame = false;
+    private MinAdapter minA = new MinAdapter();
 
-    private final short[][] screenData = new short[9][9];
+    private final short[][] screenData = new short[numOfBlocks][numOfBlocks];
 
     private int herox;
     private int heroy;
@@ -39,8 +39,8 @@ public class Grid extends JPanel implements ActionListener {
                 2, 2, 2, 2, 2, 2, 2, 2, 2,
                 2, 0, 0, 0, 0, 0, 0, 0, 2,
                 2, 0, 0, 2, 2, 2, 0, 0, 2,
-                2, 2, 0, 0, 0, 2, 0, 2, 2,
-                2, 0, 0, 2, 0, 0, 3, 0, 2,
+                2, 2, 0, 0, 0, 0, 0, 2, 2,
+                2, 0, 0, 2, 0, 2, 3, 0, 2,
                 2, 0, 0, 2, 0, 2, 0, 0, 2,
                 2, 2, 0, 2, 0, 2, 0, 2, 2,
                 2, 0, 0, 0, 0, 0, 1, 0, 2,
@@ -51,7 +51,7 @@ public class Grid extends JPanel implements ActionListener {
     public Grid() {
         setSize(screenSize, screenSize);
         loadImages();
-        addKeyListener(new MinAdapter());
+        addKeyListener(minA);
 
         startLevel();
 
@@ -74,13 +74,17 @@ public class Grid extends JPanel implements ActionListener {
     }
 
     //initially draws the map
-    public void drawMap(Graphics g) {
+    public void drawMap(Graphics g) 
+    {
         g.setColor(Color.black);
         g.fillRect(0, 0, screenSize, screenSize);
-        for (int i = 0; i < screenData.length; i++) {
-            for (int j = 0; j < screenData.length; j++) {
+        for (int i = 0; i < screenData.length; i++) 
+        {
+            for (int j = 0; j < screenData.length; j++) 
+            {
                 int num = screenData[j][i];
-                switch (num) {
+                switch (num) 
+                {
                     case 0:
                         break;
                     case 1:
@@ -110,22 +114,27 @@ public class Grid extends JPanel implements ActionListener {
     }
 
     //loads in the images from the resources folder
-    public void loadImages() {
+    public void loadImages() 
+    {
         hero = new ImageIcon("hero.jpg").getImage();
 
     }
 
-    public void playGame(Graphics2D g2d) {
-        if (dying) {
+    public void playGame(Graphics2D g2d) 
+    {
+        if (dying) 
+        {
             death();
-        } else {
+        } else 
+        {
             moveHero(g2d);
             //moveEnemy(g2d);
         }
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) 
+    {
         repaint();
     }
 
@@ -214,7 +223,7 @@ public class Grid extends JPanel implements ActionListener {
     }
 
     private void moveHero(Graphics2D g2d) {
-        char key = MinAdapter.keyDir;
+        char key = minA.getKeyDir();
         switch (key) {
             case 'l':
                 moveHeroLeft(g2d);

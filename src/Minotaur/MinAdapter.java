@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
  * @author mrswe_000
  */
 class MinAdapter extends KeyAdapter{
-    public static char keyDir; 
+    public char keyDir; 
     @Override
     public void keyPressed(KeyEvent e)
     {
@@ -35,5 +35,10 @@ class MinAdapter extends KeyAdapter{
         {
             keyDir = 'd';
         }
+    }
+    
+    public char getKeyDir()
+    {
+        return keyDir;
     }
 }
