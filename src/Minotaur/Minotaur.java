@@ -16,18 +16,19 @@ import javax.swing.JFrame;
  *
  * @author mrswe_000
  */
-public class Minotaur
+public class Minotaur extends JFrame
 {   
+    private static final int blockSize = 40;
+    private static final int numOfBlocks = 9;
+    private static final int screenSize = numOfBlocks * blockSize;
+    
     public static void main(String[] args) 
     {
-	Frame game  = new Frame("Minotaur");
-        
-        Model world = new Model();
-        Grid screen = new Grid(world);
-        
-        game.add(screen);
-        game.pack();
-        game.setVisible(true);
+        JFrame jF = new JFrame();
+        jF.setSize(screenSize, screenSize);
+	jF.add(new Grid());
+        jF.pack();
+        jF.setVisible(true);
 
     }    
     
