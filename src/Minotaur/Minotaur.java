@@ -5,16 +5,7 @@
  */
 package Minotaur;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 /**
  *
@@ -24,23 +15,21 @@ public class Minotaur extends JFrame
 {   
     public Minotaur()
     {     
-        add(new Grid());
-        setSize(Grid.screenSize, Grid.screenSize) ;
+        JFrame jf = new JFrame("Minotaur");
+        jf.add(new Grid());
+        jf.setSize(Grid.screenSize + 20, Grid.screenSize + 40);
+        jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	
-        setVisible(true);
+        jf.setVisible(true);
     }
     public static void main(String[] args) 
     {
         HighScore score = new HighScore();
         score.showScore();
         
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                Minotaur min = new Minotaur();
-                min.setVisible(true);
-            }
+        EventQueue.invokeLater(() -> {
+            Minotaur min = new Minotaur();
+            min.setVisible(true);
         });
     }      
 }
