@@ -11,6 +11,10 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 /**
  *
@@ -19,7 +23,7 @@ import javax.swing.JFrame;
 public class Minotaur extends JFrame
 {   
     public Minotaur()
-    {
+    {     
         add(new Grid());
         setSize(Grid.screenSize, Grid.screenSize);
 	
@@ -27,6 +31,9 @@ public class Minotaur extends JFrame
     }
     public static void main(String[] args) 
     {
+        HighScore score = new HighScore();
+        score.showScore();
+        
         EventQueue.invokeLater(new Runnable() {
 
             @Override
@@ -35,8 +42,5 @@ public class Minotaur extends JFrame
                 min.setVisible(true);
             }
         });
-    }    
-    
-    
-    
+    }      
 }
