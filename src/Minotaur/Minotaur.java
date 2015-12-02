@@ -25,7 +25,7 @@ public class Minotaur extends JFrame
     public Minotaur()
     {     
         add(new Grid());
-        setSize(Grid.screenSize, Grid.screenSize);
+        setSize(Grid.screenSize, Grid.screenSize) ;
 	
         setVisible(true);
     }

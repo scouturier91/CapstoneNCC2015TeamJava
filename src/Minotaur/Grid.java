@@ -18,7 +18,7 @@ public class Grid extends JPanel implements ActionListener {
 
     private static final int blockSize = 40;
     private static final int numOfBlocks = 9;
-    public static final int screenSize = numOfBlocks * blockSize;
+    public static final int screenSize = (numOfBlocks * blockSize);
 
     //checks to see whether the hero is still alive
     private boolean dying = false;
