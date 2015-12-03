@@ -11,19 +11,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
-public class Grid extends JPanel implements ActionListener {
+public class Grid extends JPanel implements ActionListener, KeyListener {
 
     //images for the hero and minotaur 
-    private Image hero;
+    private BufferedImage hero;
     private Image minotaur;
 
     private static final int blockSize = 50;
     private static final int numOfBlocks = 9;
     public static final int screenSize = numOfBlocks * blockSize;
+    
     private Dimension dim = new Dimension(screenSize, screenSize);
     //checks to see whether the hero is still alive
     private boolean dying = false;
@@ -68,7 +72,7 @@ public class Grid extends JPanel implements ActionListener {
     public Grid() {
         
         loadImages();
-        addKeyListener(new MinAdapter());
+        addKeyListener(this);
 
         setFocusable(true);
         startLevel();
@@ -117,7 +121,14 @@ public class Grid extends JPanel implements ActionListener {
     //loads in the images from the resources folder
     public void loadImages() 
     {
-        hero = new ImageIcon("hero.jpg").getImage();
+        try
+        {
+        hero = ImageIO.read(new File("Capstone/src/Minotaur/hero.png"));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading Image.");
+        } 
 
     }
 
@@ -131,38 +142,50 @@ public class Grid extends JPanel implements ActionListener {
             moveHero(g2d);
             //moveEnemy(g2d);
             repaint();
-            Thread.sleep(4);
+            Thread.sleep(6);
         }
     }
     
     private void moveHero(Graphics2D g2d) {
-        int pos;
-        short ch;
-
-        if (heroChangeInDirX == -heroChangeInPosX && heroChangeInDirY == -heroChangeInPosY) {
-            heroChangeInPosX = heroChangeInDirX;
-            heroChangeInPosY = heroChangeInDirY;
+        heroChangeInPosX = heroChangeInDirX;
+        heroChangeInPosY = heroChangeInDirY;
+        
+        //deals with wall collisions and moves coordinates of hero in x 
+        if (herox + heroSpeed * heroChangeInPosX > dim.getWidth() - blockSize * 2)
+        {
+            herox = (int) dim.getWidth() - blockSize * 2 -1;
+            heroChangeInPosX = -heroChangeInPosX;
         }
-
-        if (herox % blockSize == 0 && heroy % blockSize == 0) {
-            pos = herox / blockSize + numOfBlocks * (int) (heroy / blockSize);
-            ch = boardData[pos];
-
-
-            if (heroChangeInDirX != 0 || heroChangeInDirY != 0) {
-                if (ch != 2) {
-                    heroChangeInPosX = heroChangeInDirX;
-                    heroChangeInPosY = heroChangeInDirY;
-                }
-            }
-
+        else if (herox + heroSpeed * heroChangeInPosX < 0 + blockSize)
+        {
+            herox = 0 + blockSize;
+            heroChangeInPosX = -heroChangeInPosX;
         }
-       
-        herox = herox + heroSpeed * heroChangeInPosX;
-        heroy = heroy + heroSpeed * heroChangeInPosY;
+        else
+        {
+            herox = herox + heroSpeed * heroChangeInPosX;
+        }
+        
+        //deals with wall collisions and moves coordinates of hero in y
+        if (heroy + heroSpeed * heroChangeInPosY > dim.getHeight() - blockSize * 2)
+        {
+            heroy = (int) dim.getHeight() - blockSize * 2 - 1;
+            heroChangeInPosY = -heroChangeInPosY;
+        }
+        else if (heroy + heroSpeed * heroChangeInPosY < 0 + blockSize)
+        {
+            heroy = 0 + blockSize;
+            heroChangeInPosY = -heroChangeInPosY;
+        }
+        else
+        {
+            heroy = heroy + heroSpeed * heroChangeInPosY;
+        }
         
         g2d.setColor(Color.blue);
-        g2d.fillRect( herox + 1, heroy + 1, blockSize, blockSize);
+        //g2d.fillRect( herox , heroy , blockSize, blockSize);
+        g2d.drawOval(herox, heroy, blockSize, blockSize);
+        //g2d.drawImage(hero, herox, heroy, null);
     }
 
     @Override
@@ -171,7 +194,7 @@ public class Grid extends JPanel implements ActionListener {
         try {
             drawBoard((Graphics2D)g);
         } catch (InterruptedException ex) {
-            Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
     
@@ -203,46 +226,45 @@ public class Grid extends JPanel implements ActionListener {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    class MinAdapter extends KeyAdapter {
+    @Override
+    public void keyTyped(KeyEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-            int key = e.getKeyCode();
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
 
-            switch (key) {
-                case KeyEvent.VK_LEFT:
-                    heroChangeInDirX = -1;
-                    heroChangeInDirY = 0;
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    heroChangeInDirX = 1;
-                    heroChangeInDirY = 0;
-                    break;
-                case KeyEvent.VK_UP:
-                    heroChangeInDirX = 0;
-                    heroChangeInDirY = -1;
-                    break;
-                case KeyEvent.VK_DOWN:
-                    heroChangeInDirX = 0;
-                    heroChangeInDirY = 1;
-                    break;
-                default:
-                    break;
-            }
-        }
-        
-        @Override
-        public void keyReleased(KeyEvent e) {
-
-            int key = e.getKeyCode();
-
-            if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_LEFT
-                    || key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) {
-                heroChangeInDirX = 0;
+        switch (key) {
+            case KeyEvent.VK_LEFT:
+                heroChangeInDirX = -1;
                 heroChangeInDirY = 0;
-            }
-            
+                break;
+            case KeyEvent.VK_RIGHT:
+                heroChangeInDirX = 1;
+                heroChangeInDirY = 0;
+                break;
+            case KeyEvent.VK_UP:
+                heroChangeInDirX = 0;
+                heroChangeInDirY = -1;
+                break;
+            case KeyEvent.VK_DOWN:
+                heroChangeInDirX = 0;
+                heroChangeInDirY = 1;
+                break;
+            default:
+                break;
         }
     }
 
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_LEFT
+                || key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) {
+            heroChangeInDirX = 0;
+            heroChangeInDirY = 0;
+        }
+    }
 }
