@@ -17,7 +17,7 @@ public class Minotaur extends JFrame
     {     
         JFrame jf = new JFrame("Minotaur");
         jf.add(new Grid());
-        jf.setSize(Grid.screenSize + 20, Grid.screenSize + 40);
+        jf.setSize(Grid.screenSize + 20, Grid.screenSize + 100);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	
         jf.setVisible(true);
@@ -25,7 +25,7 @@ public class Minotaur extends JFrame
     public static void main(String[] args) 
     {
         HighScore score = new HighScore();
-        score.showScore();
+        //score.showScore();
         
         EventQueue.invokeLater(() -> {
             Minotaur min = new Minotaur();
