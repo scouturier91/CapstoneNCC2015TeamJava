@@ -5,6 +5,7 @@
  */
 package Minotaur;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 /**
@@ -14,11 +15,15 @@ import javax.swing.JFrame;
 public class Minotaur extends JFrame
 {   
     public Minotaur()
-    {     
+    {   
+        ScorePanel scorePanel = new ScorePanel();
         JFrame jf = new JFrame("Minotaur");
         jf.add(new Grid());
         jf.setSize(Grid.screenSize + 20, Grid.screenSize + 100);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        jf.add(scorePanel, BorderLayout.SOUTH);
+
 	
         jf.setVisible(true);
     }
