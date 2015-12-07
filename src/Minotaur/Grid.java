@@ -8,37 +8,37 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
 
+    private boolean levelTime = true;
+    private Timer time;
     //images for the hero and minotaur 
     private BufferedImage hero;
     private Image minotaur;
 
+    //dimensiosn for the map size
     private static final int blockSize = 50;
     private static final int numOfBlocks = 9;
     public static final int screenSize = numOfBlocks * blockSize;
-    
     private Dimension dim = new Dimension(screenSize, screenSize);
+    
     //checks to see whether the hero is still alive
     private boolean dying = false;
     private boolean inGame = false;
-
-    private final short[][] screenData = new short[numOfBlocks][numOfBlocks];
-
-    private boolean isRunning = true;
+    
+    //the x and y coordinates of the inner walls
+    private int innerWallsX[] = new int[50];
+    private int innerWallsY[] = new int[50];
     
     //x and y coordinates of the hero
-    private int herox = blockSize;
+    private int herox = blockSize * 4;
     private int heroy = blockSize;
     //change in position of the hero in the x direction
     private int heroChangeInPosX;
@@ -47,13 +47,27 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     //change in heros direction
     private int heroChangeInDirX;
     private int heroChangeInDirY;
-    
-    private int heroSpeed = 1;
+    //speed of the hero
+    private int heroSpeed =1;
     
 
-    private int enemyx;
-    private int enemyy;
+    //x and y coordinates of the enemy
+    private int enemyx = blockSize * 4;
+    private int enemyy = blockSize * 5;
+    //change in position of the enemy in the x direction
+    private int enemyChangeInPosX;
+     //change in position of the enemy in the y direction
+    private int enemyChangeInPosY;
+    //change in enemys direction
+    private int enemyChangeInDirX;
+    private int enemyChangeInDirY;
+    //speed of the enemy
+    private int enemySpeed = 1;
+    
+    private final int stairsX = blockSize * 4;
+    private final int stairsY = blockSize * 4;
 
+    private final short[][] screenData = new short[numOfBlocks][numOfBlocks];
     private final short boardData[]
             = {
                 //will currently generate a blank map
@@ -69,13 +83,22 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             };
 
     //default constuctor called on game startup
-    public Grid() {
-        
+    public Grid() 
+    {        
         loadImages();
         addKeyListener(this);
-
+        
         setFocusable(true);
-        startLevel();
+        inGame = true;
+        time = new Timer(60, (ActionEvent evt) -> 
+        {
+            if (!time.isRunning())
+            {
+                levelTime = false;
+            }
+        });
+        time.start();
+        startLevel(); 
         setDoubleBuffered(true);
 
     }
@@ -90,40 +113,55 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 z++;
             }
         }  
+        getInnerWalls();
+    }
+    
+    //puts the inner walls in arrays 
+    private void getInnerWalls() 
+    {
+        int k = 0;
+        for (int i = 0; i < screenData.length; i++) 
+        {
+            for (int j = 0; j < screenData.length; j++) 
+            {
+                if (screenData[j][i] == 2) 
+                {
+                    //adds any walls that arent on the outside 
+                    if (j != 0 && i != 0 && i != 9 && j != 9)
+                    {
+                        innerWallsY[k] = j * blockSize;
+                        innerWallsX[k] = i * blockSize; 
+                        k++;
+                    }      
+                }
+            }
+        }
+         
     }
 
-    //initially draws the map
+    //draws the map
     public void drawMap(Graphics2D g) 
     {
         for (int i = 0; i < screenData.length; i++) 
         {
             for (int j = 0; j < screenData.length; j++) 
             {
-                int num = screenData[j][i];
-                switch (num) 
+                if (screenData[j][i] == 2) 
                 {
-                    case 0: break;
-                    case 2:
-                        g.setColor(Color.yellow);
+                        g.setColor(Color.green);
                         g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
-                        break;
-                    default:
-                        System.err.println("invalid character");
-
                 }
             }
         }
-        
     }
 
-    
-    
     //loads in the images from the resources folder
     public void loadImages() 
     {
         try
         {
-        hero = ImageIO.read(new File("Capstone/src/Minotaur/hero.png"));
+        hero = ImageIO.read(new File("hero.png"));
+       // hero = ImageIO.read(getResourceAsStream("/hero.png"));
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -140,7 +178,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         } else 
         {
             moveHero(g2d);
-            //moveEnemy(g2d);
+            moveEnemy(g2d);
+            checkAlive();
             repaint();
             Thread.sleep(6);
         }
@@ -149,43 +188,53 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private void moveHero(Graphics2D g2d) {
         heroChangeInPosX = heroChangeInDirX;
         heroChangeInPosY = heroChangeInDirY;
-        
+
         //deals with wall collisions and moves coordinates of hero in x 
-        if (herox + heroSpeed * heroChangeInPosX > dim.getWidth() - blockSize * 2)
-        {
-            herox = (int) dim.getWidth() - blockSize * 2 -1;
-            heroChangeInPosX = -heroChangeInPosX;
-        }
-        else if (herox + heroSpeed * heroChangeInPosX < 0 + blockSize)
-        {
+        if (herox + heroSpeed * heroChangeInPosX > dim.getWidth() - blockSize * 2) {
+            herox = (int) dim.getWidth() - blockSize * 2 - 1;
+            //heroChangeInPosX = -heroChangeInPosX;
+        } else if (herox + heroSpeed * heroChangeInPosX < 0 + blockSize) {
             herox = 0 + blockSize;
-            heroChangeInPosX = -heroChangeInPosX;
+            //heroChangeInPosX = -heroChangeInPosX;
+        } else {
+            if (!checkBoxes(herox + heroSpeed * heroChangeInPosX, heroy))
+            {
+                herox = herox + heroSpeed * heroChangeInPosX;
+            }  
         }
-        else
-        {
-            herox = herox + heroSpeed * heroChangeInPosX;
-        }
-        
+
         //deals with wall collisions and moves coordinates of hero in y
-        if (heroy + heroSpeed * heroChangeInPosY > dim.getHeight() - blockSize * 2)
-        {
+        if (heroy + heroSpeed * heroChangeInPosY > dim.getHeight() - blockSize * 2) {
             heroy = (int) dim.getHeight() - blockSize * 2 - 1;
-            heroChangeInPosY = -heroChangeInPosY;
-        }
-        else if (heroy + heroSpeed * heroChangeInPosY < 0 + blockSize)
-        {
+            //heroChangeInPosY = -heroChangeInPosY;
+        } else if (heroy + heroSpeed * heroChangeInPosY < 0 + blockSize) {
             heroy = 0 + blockSize;
-            heroChangeInPosY = -heroChangeInPosY;
-        }
-        else
-        {
-            heroy = heroy + heroSpeed * heroChangeInPosY;
+            //heroChangeInPosY = -heroChangeInPosY;
+        } else {
+            if (!checkBoxes(heroy, heroy + heroSpeed * heroChangeInPosY))
+            {
+                heroy = heroy + heroSpeed * heroChangeInPosY;
+            }
         }
         
-        g2d.setColor(Color.blue);
-        //g2d.fillRect( herox , heroy , blockSize, blockSize);
+        g2d.setColor(Color.orange);
         g2d.drawOval(herox, heroy, blockSize, blockSize);
+
         //g2d.drawImage(hero, herox, heroy, null);
+    }
+    
+    //checks whether the sprite is colliding with a wall inside the maze
+    public boolean checkBoxes(int x, int y) 
+    {
+        for (int i = 0; i < innerWallsX.length; i++) {
+
+            if (y > innerWallsY[i] && y < innerWallsY[i] + blockSize) {
+                if (x > innerWallsX[i] && x < innerWallsX[i] + blockSize) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -204,6 +253,10 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.fillRect(0, 0, dim.width, dim.height);
         drawMap(g2d);
         playGame(g2d);
+        if (!levelTime)
+        {
+            drawStairs(g2d);
+        }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
     }
@@ -215,15 +268,83 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     private void death() {
+        time.stop();
         inGame = false;
     }
 
     private void moveEnemy(Graphics2D g2d) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (heroChangeInDirX == 1) {
+            enemyChangeInDirX = 1;
+        }
+        else if (heroChangeInDirX == -1) {
+            enemyChangeInDirX = -1;
+        }
+        else if (heroChangeInDirY == 1) {
+            enemyChangeInDirY = 1;
+        }
+        else if (heroChangeInDirY == -1) {
+            enemyChangeInDirY = -1;
+        }
+
+        enemyChangeInPosX = enemyChangeInDirX;
+        enemyChangeInPosY = enemyChangeInDirY;
+        
+        //deals with wall collisions and moves coordinates of enemy in x 
+        if (enemyx + enemySpeed * enemyChangeInPosX > dim.getWidth() - blockSize * 2)
+        {
+            enemyx = (int) dim.getWidth() - blockSize * 2 -1;
+            //enemyChangeInPosX = -enemyChangeInPosX;
+        }
+        else if (enemyx + enemySpeed * enemyChangeInPosX < 0 + blockSize)
+        {
+            enemyx = 0 + blockSize;
+            //enemyChangeInPosX = -enemyChangeInPosX;
+        }
+        else
+        {
+            if (!checkBoxes(enemyx + enemySpeed * enemyChangeInPosX, enemyy))
+            {
+                enemyx = enemyx + enemySpeed * enemyChangeInPosX;
+            }
+        }
+        
+        //deals with wall collisions and moves coordinates of hero in y
+        if (enemyy + enemySpeed * enemyChangeInPosY > dim.getHeight() - blockSize * 2)
+        {
+            enemyy = (int) dim.getHeight() - blockSize * 2 - 1;
+            //enemyChangeInPosY = -enemyChangeInPosY;
+        }
+        else if (enemyy + enemySpeed * enemyChangeInPosY < 0 + blockSize)
+        {
+            enemyy = 0 + blockSize;
+            //enemyChangeInPosY = -enemyChangeInPosY;
+        }
+        else
+        {
+            if (!checkBoxes(enemyx, enemyy + enemySpeed * enemyChangeInPosY))
+            {
+                enemyy = enemyy + enemySpeed * enemyChangeInPosY;
+            }
+        }
+        
+        g2d.setColor(Color.red);
+        g2d.drawOval(enemyx, enemyy, blockSize, blockSize);
+        enemyChangeInDirX = heroChangeInDirX;
+        enemyChangeInDirY = heroChangeInDirY;
     }
 
-    private void checkMaze() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void checkAlive() {
+        if (herox < enemyx + blockSize && herox > enemyx + blockSize) {
+            if (heroy < enemyy + blockSize && heroy > enemyy + blockSize) {
+                dying = true;
+            }
+        }
+    }
+    
+    private void drawStairs(Graphics2D g2d)
+    {
+        g2d.setColor(Color.blue);
+        g2d.drawRect(stairsX, stairsY, blockSize, blockSize);
     }
 
     @Override
