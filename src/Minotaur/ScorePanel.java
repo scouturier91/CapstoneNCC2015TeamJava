@@ -5,7 +5,6 @@
  */
 package Minotaur;
 
-import static Minotaur.HighScore.currentScore;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -20,6 +19,6 @@ public class ScorePanel extends JPanel{
     public ScorePanel(){
         this.setPreferredSize(new Dimension(50,50));
         this.setBackground(Color.red);
-        this.add(new JLabel("Score: " + currentScore));
+        this.add(new JLabel("Score: " + HighScore.currentScore));
     }
 }
