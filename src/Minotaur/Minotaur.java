@@ -19,7 +19,7 @@ public class Minotaur extends JFrame
         ScorePanel scorePanel = new ScorePanel();
         JFrame jf = new JFrame("Minotaur");
         jf.add(new Grid());
-        jf.setSize(Grid.screenSize + 20, Grid.screenSize + 100);
+        jf.setSize(Grid.screenSize + 10, Grid.screenSize + 75);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         jf.add(scorePanel, BorderLayout.SOUTH);
