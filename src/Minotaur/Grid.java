@@ -12,7 +12,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
@@ -20,7 +23,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private boolean levelTime = true;
     private Timer time;
     //images for the hero and minotaur 
-    private BufferedImage hero;
+    public Image hero;
+    public ImageIcon hIcon = new ImageIcon("C:\\Users\\mrswe_000\\Desktop\\code\\CapstoneNCC2015TeamJava\\src\\Minotaur");
+    
     private Image minotaur;
 
     //dimensiosn for the map size
@@ -48,9 +53,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private int heroChangeInDirX;
     private int heroChangeInDirY;
     //speed of the hero
-    private int heroSpeed =1;
+    private int heroSpeed = 1;
     
-
     //x and y coordinates of the enemy
     private int enemyx = blockSize * 4;
     private int enemyy = blockSize * 5;
@@ -129,8 +133,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                     //adds any walls that arent on the outside 
                     if (j != 0 && i != 0 && i != 9 && j != 9)
                     {
-                        innerWallsY[k] = j * blockSize;
-                        innerWallsX[k] = i * blockSize; 
+                        innerWallsX[k] = j * blockSize;
+                        innerWallsY[k] = i * blockSize; 
                         k++;
                     }      
                 }
@@ -158,15 +162,16 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     //loads in the images from the resources folder
     public void loadImages() 
     {
-        try
-        {
-        hero = ImageIO.read(new File("hero.png"));
-       // hero = ImageIO.read(getResourceAsStream("/hero.png"));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error loading Image.");
-        } 
+     
+        //try {
+            //FileInputStream input = new FileInputStream("hero.jpg");
+            //input.read();
+            hero = hIcon.getImage();
+            //hero = ImageIO.read(getClass().getResourceAsStream("C:\\Users\\mrswe_000\\Desktop\\code\\CapstoneNCC2015TeamJava\\src\\Minotaur"));
+       // } catch (IOException ex) {
+          //  Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+        //}
+      
 
     }
 
@@ -217,8 +222,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             }
         }
         
-        g2d.setColor(Color.orange);
-        g2d.drawOval(herox, heroy, blockSize, blockSize);
+        g2d.drawImage(hero, herox, heroy, blockSize, blockSize, this);
+        //g2d.setColor(Color.orange);
+        //g2d.drawOval(herox, heroy, blockSize, blockSize);
 
         //g2d.drawImage(hero, herox, heroy, null);
     }
