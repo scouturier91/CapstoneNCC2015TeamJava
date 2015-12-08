@@ -77,11 +77,11 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 //will currently generate a blank map
                 2, 2, 2, 2, 2, 2, 2, 2, 2,
                 2, 0, 0, 0, 0, 0, 0, 0, 2,
-                2, 0, 0, 2, 2, 2, 0, 0, 2,
-                2, 2, 0, 0, 0, 0, 0, 2, 2,
+                2, 0, 0, 3, 3, 3, 0, 0, 2,
+                2, 3, 0, 0, 0, 0, 0, 3, 2,
                 2, 0, 0, 2, 0, 2, 0, 0, 2,
                 2, 0, 0, 2, 0, 2, 0, 0, 2,
-                2, 2, 0, 2, 0, 2, 0, 2, 2,
+                2, 3, 0, 0, 0, 0, 0, 3, 2,
                 2, 0, 0, 0, 0, 0, 0, 0, 2,
                 2, 2, 2, 2, 2, 2, 2, 2, 2
             };
@@ -117,11 +117,11 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 z++;
             }
         }  
-        getInnerWalls();
+        getVertWalls();
     }
     
     //puts the inner walls in arrays 
-    private void getInnerWalls() 
+    private void getVertWalls() 
     {
         int k = 0;
         for (int i = 0; i < screenData.length; i++) 
@@ -146,14 +146,32 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     //draws the map
     public void drawMap(Graphics2D g) 
     {
+        g.setColor(Color.green);
         for (int i = 0; i < screenData.length; i++) 
         {
             for (int j = 0; j < screenData.length; j++) 
             {
                 if (screenData[j][i] == 2) 
                 {
-                        g.setColor(Color.green);
+                    if (j != 0 && i != 0 && i != 8 && j != 8)
+                    {
+                        //g.setColor(Color.green);
+                        g.drawLine((i * blockSize) + blockSize/2, j * blockSize , (i * blockSize) + blockSize/2, (j * blockSize) + blockSize);
+                        //g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
+                    }
+                    else{
+                        //g.setColor(Color.green);   
                         g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
+                    }
+                }
+                else if (screenData[j][i] == 3) 
+                {
+                    if (j != 0 && i != 0 && i != 8 && j != 8)
+                    {
+                        //g.setColor(Color.green);
+                        g.drawLine(i * blockSize, j * blockSize , (i * blockSize) + blockSize, j * blockSize);
+                        //g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
+                    }
                 }
             }
         }
@@ -223,8 +241,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         }
         
         g2d.drawImage(hero, herox, heroy, blockSize, blockSize, this);
-        //g2d.setColor(Color.orange);
-        //g2d.drawOval(herox, heroy, blockSize, blockSize);
+        g2d.setColor(Color.orange);
+        g2d.drawOval(herox, heroy, blockSize, blockSize);
 
         //g2d.drawImage(hero, herox, heroy, null);
     }
