@@ -38,9 +38,13 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private boolean dying = false;
     private boolean inGame = false;
     
-    //the x and y coordinates of the inner walls
-    private int innerWallsX[] = new int[50];
-    private int innerWallsY[] = new int[50];
+    //the x and y coordinates of the vertical inner walls
+    private int innerVertWallsX[] = new int[50];
+    private int innerVertWallsY[] = new int[50];
+    
+    //the x and y coordinates of the vertical inner walls
+    private int innerHorWallsX[] = new int[50];
+    private int innerHorWallsY[] = new int[50];
     
     //x and y coordinates of the hero
     private int herox = blockSize * 4;
@@ -74,13 +78,13 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private final short[][] screenData = new short[numOfBlocks][numOfBlocks];
     private final short boardData[]
             = {
-                //will currently generate a blank map
+                //
                 2, 2, 2, 2, 2, 2, 2, 2, 2,
                 2, 0, 0, 0, 0, 0, 0, 0, 2,
                 2, 0, 0, 3, 3, 3, 0, 0, 2,
                 2, 3, 0, 0, 0, 0, 0, 3, 2,
-                2, 0, 0, 2, 0, 2, 0, 0, 2,
-                2, 0, 0, 2, 0, 2, 0, 0, 2,
+                2, 0, 0, 1, 0, 1, 0, 0, 2,
+                2, 0, 0, 1, 0, 1, 0, 0, 2,
                 2, 3, 0, 0, 0, 0, 0, 3, 2,
                 2, 0, 0, 0, 0, 0, 0, 0, 2,
                 2, 2, 2, 2, 2, 2, 2, 2, 2
@@ -117,61 +121,53 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 z++;
             }
         }  
-        getVertWalls();
+        getWalls();
     }
-    
+
     //puts the inner walls in arrays 
-    private void getVertWalls() 
-    {
+    private void getWalls() {
         int k = 0;
-        for (int i = 0; i < screenData.length; i++) 
-        {
-            for (int j = 0; j < screenData.length; j++) 
-            {
-                if (screenData[j][i] == 2) 
-                {
-                    //adds any walls that arent on the outside 
-                    if (j != 0 && i != 0 && i != 9 && j != 9)
-                    {
-                        innerWallsX[k] = j * blockSize;
-                        innerWallsY[k] = i * blockSize; 
-                        k++;
-                    }      
+        int p = 0;
+        for (int i = 0; i < screenData.length; i++) {
+            for (int j = 0; j < screenData.length; j++) {
+                if (screenData[j][i] == 1) {
+                    innerVertWallsX[k] = i * blockSize;
+                    innerVertWallsY[k] = j * blockSize;
+                    k++;
+                } 
+                else if (screenData[j][i] == 3) {
+                    innerHorWallsX[p] = i * blockSize;
+                    innerHorWallsY[p] = j * blockSize;
+                    p++;
                 }
             }
         }
-         
     }
 
     //draws the map
     public void drawMap(Graphics2D g) 
-    {
-        g.setColor(Color.green);
+    {       
         for (int i = 0; i < screenData.length; i++) 
         {
             for (int j = 0; j < screenData.length; j++) 
             {
-                if (screenData[j][i] == 2) 
-                {
-                    if (j != 0 && i != 0 && i != 8 && j != 8)
-                    {
-                        //g.setColor(Color.green);
-                        g.drawLine((i * blockSize) + blockSize/2, j * blockSize , (i * blockSize) + blockSize/2, (j * blockSize) + blockSize);
-                        //g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
-                    }
-                    else{
-                        //g.setColor(Color.green);   
+                g.setColor(Color.green);
+                switch (screenData[j][i]) {
+                    case 2:
+                        g.setColor(Color.red);
                         g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
-                    }
-                }
-                else if (screenData[j][i] == 3) 
-                {
-                    if (j != 0 && i != 0 && i != 8 && j != 8)
-                    {
-                        //g.setColor(Color.green);
-                        g.drawLine(i * blockSize, j * blockSize , (i * blockSize) + blockSize, j * blockSize);
-                        //g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
-                    }
+                        break;
+                    case 1:
+                        g.setColor(Color.green);
+                        g.drawLine((i * blockSize) + blockSize/2, j * blockSize , (i * blockSize) + blockSize/2, (j * blockSize) + blockSize);
+                        break;
+                    case 3:
+                            g.setColor(Color.green);
+                            g.drawLine(i * blockSize, j * blockSize , (i * blockSize) + blockSize, j * blockSize);
+                            //g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);  
+                            break;
+                    default:
+                        break;
                 }
             }
         }
@@ -194,50 +190,64 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     public void playGame(Graphics2D g2d) throws InterruptedException 
-    {        
-        if (dying) 
+    {     
+        if (inGame = true) 
         {
-            death();
-        } else 
-        {
-            moveHero(g2d);
-            moveEnemy(g2d);
-            checkAlive();
-            repaint();
-            Thread.sleep(6);
+            if (dying) 
+            {
+                death(g2d);
+            } 
+            else 
+            {
+                moveHero(g2d);
+                moveEnemy(g2d);
+                checkAlive();
+                repaint();
+                Thread.sleep(6);
+            }
         }
     }
     
-    private void moveHero(Graphics2D g2d) {
+    private void moveHero(Graphics2D g2d) 
+    {
         heroChangeInPosX = heroChangeInDirX;
         heroChangeInPosY = heroChangeInDirY;
 
         //deals with wall collisions and moves coordinates of hero in x 
-        if (herox + heroSpeed * heroChangeInPosX > dim.getWidth() - blockSize * 2) {
+        if (herox + heroSpeed * heroChangeInPosX > dim.getWidth() - blockSize * 2) 
+        {
             herox = (int) dim.getWidth() - blockSize * 2 - 1;
-            //heroChangeInPosX = -heroChangeInPosX;
-        } else if (herox + heroSpeed * heroChangeInPosX < 0 + blockSize) {
+        } 
+        else if (herox + heroSpeed * heroChangeInPosX < 0 + blockSize) 
+        {
             herox = 0 + blockSize;
-            //heroChangeInPosX = -heroChangeInPosX;
-        } else {
-            if (!checkBoxes(herox + heroSpeed * heroChangeInPosX, heroy))
+        } 
+        else 
+        {                              
+            if (!checkVertWalls((herox + blockSize/2) + heroSpeed * heroChangeInPosX, heroy)
+                    && !checkVertWalls((herox - blockSize/2) + heroSpeed * heroChangeInPosX, heroy))
             {
                 herox = herox + heroSpeed * heroChangeInPosX;
-            }  
+            }
+            
         }
 
         //deals with wall collisions and moves coordinates of hero in y
-        if (heroy + heroSpeed * heroChangeInPosY > dim.getHeight() - blockSize * 2) {
+        if (heroy + heroSpeed * heroChangeInPosY > dim.getHeight() - blockSize * 2) 
+        {
             heroy = (int) dim.getHeight() - blockSize * 2 - 1;
-            //heroChangeInPosY = -heroChangeInPosY;
-        } else if (heroy + heroSpeed * heroChangeInPosY < 0 + blockSize) {
+        } 
+        else if (heroy + heroSpeed * heroChangeInPosY < 0 + blockSize) {
             heroy = 0 + blockSize;
-            //heroChangeInPosY = -heroChangeInPosY;
-        } else {
-            if (!checkBoxes(heroy, heroy + heroSpeed * heroChangeInPosY))
+        } 
+        else 
+        {
+            if (!checkHorWalls(herox, (heroy + blockSize) + heroSpeed * heroChangeInPosY)
+                    && !checkHorWalls(herox, (heroy + blockSize) + heroSpeed * heroChangeInPosY))
             {
                 heroy = heroy + heroSpeed * heroChangeInPosY;
             }
+            
         }
         
         g2d.drawImage(hero, herox, heroy, blockSize, blockSize, this);
@@ -247,14 +257,34 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         //g2d.drawImage(hero, herox, heroy, null);
     }
     
-    //checks whether the sprite is colliding with a wall inside the maze
-    public boolean checkBoxes(int x, int y) 
-    {
-        for (int i = 0; i < innerWallsX.length; i++) {
-
-            if (y > innerWallsY[i] && y < innerWallsY[i] + blockSize) {
-                if (x > innerWallsX[i] && x < innerWallsX[i] + blockSize) {
-                    return true;
+    //checks whether the sprite is colliding with a vertical wall inside the maze
+    public boolean checkVertWalls(int x, int y) 
+    {      
+        for (int i = 0; i < innerVertWallsY.length; i++) 
+        {
+            if (innerVertWallsX[i] == x)
+            {
+                if (y > innerVertWallsY[i] - blockSize && y < innerVertWallsY[i] + blockSize )
+                {
+                    System.out.println("x "+ innerVertWallsX[i] + "y " + innerVertWallsY[i]);
+                    return true;                  
+                }
+            }
+        }
+        return false;
+    }
+    
+    //checks whether the sprite is colliding with a horizontal wall inside the maze
+    public boolean checkHorWalls(int x, int y) 
+    { 
+        for (int i = 0; i < innerHorWallsY.length; i++) 
+        {
+            if (innerHorWallsY[i] == y)
+            {
+                if (x > innerHorWallsX[i] - blockSize && x < innerHorWallsX[i] + blockSize )
+                {
+                    System.out.println("x "+ innerHorWallsX[i] + "y " + innerHorWallsY[i]);
+                    return true;                   
                 }
             }
         }
@@ -262,11 +292,15 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) 
+    {
         super.paintComponent(g);
-        try {
+        try 
+        {
             drawBoard((Graphics2D)g);
-        } catch (InterruptedException ex) {
+        } 
+        catch (InterruptedException ex) {
+            
             ex.printStackTrace();
         }
     }
@@ -291,22 +325,31 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         repaint();
     }
 
-    private void death() {
+    private void death(Graphics2D g2d) {
         time.stop();
         inGame = false;
+        
+        g2d.setColor(Color.black);
+        g2d.fillRect(0, 0, dim.width, dim.height);
+        
     }
 
-    private void moveEnemy(Graphics2D g2d) {
-        if (heroChangeInDirX == 1) {
+    private void moveEnemy(Graphics2D g2d) 
+    {
+        if (heroChangeInDirX == 1) 
+        {
             enemyChangeInDirX = 1;
         }
-        else if (heroChangeInDirX == -1) {
+        else if (heroChangeInDirX == -1) 
+        {
             enemyChangeInDirX = -1;
         }
-        else if (heroChangeInDirY == 1) {
+        else if (heroChangeInDirY == 1) 
+        {
             enemyChangeInDirY = 1;
         }
-        else if (heroChangeInDirY == -1) {
+        else if (heroChangeInDirY == -1) 
+        {
             enemyChangeInDirY = -1;
         }
 
@@ -317,16 +360,14 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         if (enemyx + enemySpeed * enemyChangeInPosX > dim.getWidth() - blockSize * 2)
         {
             enemyx = (int) dim.getWidth() - blockSize * 2 -1;
-            //enemyChangeInPosX = -enemyChangeInPosX;
         }
         else if (enemyx + enemySpeed * enemyChangeInPosX < 0 + blockSize)
         {
             enemyx = 0 + blockSize;
-            //enemyChangeInPosX = -enemyChangeInPosX;
         }
         else
         {
-            if (!checkBoxes(enemyx + enemySpeed * enemyChangeInPosX, enemyy))
+            if (!checkVertWalls(enemyx + enemySpeed * enemyChangeInPosX, enemyy))
             {
                 enemyx = enemyx + enemySpeed * enemyChangeInPosX;
             }
@@ -336,16 +377,14 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         if (enemyy + enemySpeed * enemyChangeInPosY > dim.getHeight() - blockSize * 2)
         {
             enemyy = (int) dim.getHeight() - blockSize * 2 - 1;
-            //enemyChangeInPosY = -enemyChangeInPosY;
         }
         else if (enemyy + enemySpeed * enemyChangeInPosY < 0 + blockSize)
         {
             enemyy = 0 + blockSize;
-            //enemyChangeInPosY = -enemyChangeInPosY;
         }
         else
         {
-            if (!checkBoxes(enemyx, enemyy + enemySpeed * enemyChangeInPosY))
+            if (!checkHorWalls(enemyx, enemyy + enemySpeed * enemyChangeInPosY))
             {
                 enemyy = enemyy + enemySpeed * enemyChangeInPosY;
             }

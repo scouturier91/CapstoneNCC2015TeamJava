@@ -33,8 +33,7 @@ public class Minotaur extends JFrame
         //score.showScore();
         
         EventQueue.invokeLater(() -> {
-            Minotaur min = new Minotaur();
-            min.setVisible(true);
+            Minotaur min = new Minotaur();          
         });
     }      
 }
