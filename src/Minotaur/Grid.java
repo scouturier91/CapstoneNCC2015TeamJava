@@ -81,7 +81,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 //
                 2, 2, 2, 2, 2, 2, 2, 2, 2,
                 2, 0, 0, 0, 0, 0, 0, 0, 2,
-                2, 0, 0, 3, 3, 3, 0, 0, 2,
+                2, 0, 0, 0, 3, 0, 0, 0, 2,
                 2, 3, 0, 0, 0, 0, 0, 3, 2,
                 2, 0, 0, 1, 0, 1, 0, 0, 2,
                 2, 0, 0, 1, 0, 1, 0, 0, 2,
@@ -164,6 +164,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                     case 3:
                             g.setColor(Color.green);
                             g.drawLine(i * blockSize, j * blockSize , (i * blockSize) + blockSize, j * blockSize);
+                            //g.drawLine(i * blockSize, j * blockSize , i * blockSize, j * blockSize);
                             //g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);  
                             break;
                     default:
@@ -242,8 +243,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         } 
         else 
         {
-            if (!checkHorWalls(herox, (heroy + blockSize) + heroSpeed * heroChangeInPosY)
-                    && !checkHorWalls(herox, (heroy + blockSize) + heroSpeed * heroChangeInPosY))
+            if (!checkHorWalls(herox, heroy + heroSpeed * heroChangeInPosY)
+                   && !checkHorWalls(herox, (heroy + blockSize) + heroSpeed * heroChangeInPosY))
             {
                 heroy = heroy + heroSpeed * heroChangeInPosY;
             }
@@ -279,8 +280,10 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     { 
         for (int i = 0; i < innerHorWallsY.length; i++) 
         {
+            //check the y coordinates to see if there is a wall on that axis
             if (innerHorWallsY[i] == y)
             {
+                //check the x coordinates to see if there is wall within the coordinates of the next move
                 if (x > innerHorWallsX[i] - blockSize && x < innerHorWallsX[i] + blockSize )
                 {
                     System.out.println("x "+ innerHorWallsX[i] + "y " + innerHorWallsY[i]);
