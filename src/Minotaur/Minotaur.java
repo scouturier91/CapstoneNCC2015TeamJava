@@ -6,34 +6,52 @@
 package Minotaur;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 /**
  *
  * @author mrswe_000
  */
 public class Minotaur extends JFrame
 {   
+    JFrame jf = new JFrame("Minotaur");
+    scorePanel scorePanel = new scorePanel();
     public Minotaur()
     {   
-        ScorePanel scorePanel = new ScorePanel();
-        JFrame jf = new JFrame("Minotaur");
         jf.add(new Grid());
         jf.setSize(Grid.screenSize + 10, Grid.screenSize + 75);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         jf.add(scorePanel, BorderLayout.SOUTH);
-
-	
+        
         jf.setVisible(true);
+        
+        
     }
     public static void main(String[] args) 
     {
         HighScore score = new HighScore();
         //score.showScore();
         
+        for (int i = 0; i < 1005; i++){
+            score.currentScore = score.currentScore+10;
+        }
+        
         EventQueue.invokeLater(() -> {
             Minotaur min = new Minotaur();          
         });
     }      
+
+    private static class scorePanel extends JPanel {
+
+        public scorePanel() {
+        this.setPreferredSize(new Dimension(50,50));
+        this.setBackground(Color.red);
+        this.add(new JLabel("Score: " + HighScore.currentScore));
+        }
+    }
 }
