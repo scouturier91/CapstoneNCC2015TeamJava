@@ -370,7 +370,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         }
         else
         {
-            if (!checkVertWalls(enemyx + enemySpeed * enemyChangeInPosX, enemyy))
+            if (!checkVertWalls((enemyx + blockSize/2) + enemySpeed * enemyChangeInPosX, enemyy)
+                    && !checkVertWalls((enemyx - blockSize/2) + enemySpeed * enemyChangeInPosX, enemyy))
             {
                 enemyx = enemyx + enemySpeed * enemyChangeInPosX;
             }
@@ -387,7 +388,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         }
         else
         {
-            if (!checkHorWalls(enemyx, enemyy + enemySpeed * enemyChangeInPosY))
+            if (!checkHorWalls(enemyx, enemyy + enemySpeed * enemyChangeInPosY)
+                   && !checkHorWalls(enemyx, (enemyy + blockSize) + enemySpeed * enemyChangeInPosY))
             {
                 enemyy = enemyy + enemySpeed * enemyChangeInPosY;
             }
@@ -395,8 +397,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         
         g2d.setColor(Color.red);
         g2d.drawOval(enemyx, enemyy, blockSize, blockSize);
-        enemyChangeInDirX = heroChangeInDirX;
-        enemyChangeInDirY = heroChangeInDirY;
     }
 
     private void checkAlive() {
