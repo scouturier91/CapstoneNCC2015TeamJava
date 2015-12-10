@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Minotaur;
+package Minotaur.JavaFiles;
 
+import Minotaur.JavaFiles.Grid;
+import Minotaur.JavaFiles.Hero;
+import Minotaur.JavaFiles.MinBaseChar;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -28,7 +31,19 @@ public class Enemy extends MinBaseChar{
     //speed of the enemy
     private int enemySpeed = 1;
     
+    @Override
     public void move(Graphics2D g2d) {
+        determineDir();
+        
+        moveX();
+        moveY();
+        
+        g2d.setColor(Color.red);
+        g2d.drawOval(enemyx, enemyy, blockSize, blockSize);
+
+    }
+    
+    public void determineDir(){
         enemyChangeInDirX = 0;
         enemyChangeInDirY = 0;
 
@@ -49,7 +64,9 @@ public class Enemy extends MinBaseChar{
 
         enemyChangeInPosX = enemyChangeInDirX;
         enemyChangeInPosY = enemyChangeInDirY;
-
+    }
+    
+    public void moveX(){
         //deals with wall collisions and moves coordinates of enemy in x 
         if (enemyx + enemySpeed * enemyChangeInPosX > Grid.getDimension().getWidth() - blockSize * 2) {
             enemyx = (int) Grid.getDimension().getWidth() - blockSize * 2 - 1;
@@ -61,7 +78,9 @@ public class Enemy extends MinBaseChar{
         } else {
             enemyy = enemyy + enemySpeed * enemyChangeInPosX;
         }
-
+    }
+    
+    public void moveY(){
         //deals with wall collisions and moves coordinates of hero in y
         if (enemyy + enemySpeed * enemyChangeInPosY > Grid.getDimension().getHeight() - blockSize * 2) {
             enemyy = (int) Grid.getDimension().getHeight() - blockSize * 2 - 1;
@@ -75,12 +94,8 @@ public class Enemy extends MinBaseChar{
                 {
                     enemyx = enemyx + enemySpeed * enemyChangeInPosY;
                 }
-            }
-
-            g2d.setColor(Color.red);
-            g2d.drawOval(enemyx, enemyy, blockSize, blockSize);
+            }   
         }
-
     }
     
     public int getEnemyX(){

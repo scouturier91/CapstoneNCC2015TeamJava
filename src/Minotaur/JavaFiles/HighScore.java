@@ -1,11 +1,10 @@
-package Minotaur;
+package Minotaur.JavaFiles;
 
 import java.util.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import oracle.jrockit.jfr.JFR;
 
 
 public class HighScore {

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Minotaur;
+package Minotaur.JavaFiles;
 
+import Minotaur.JavaFiles.MinBaseChar;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -28,7 +29,20 @@ public class Hero extends MinBaseChar{
     //speed of the hero
     private int heroSpeed = 1;
 
+    @Override
     public void move(Graphics2D g2d) {
+        moveX();
+        moveY();
+        
+        //g2d.drawImage(hero, herox, heroy, blockSize, blockSize, this);
+        g2d.setColor(Color.orange);
+        g2d.drawOval(herox, heroy, blockSize, blockSize);
+
+        //g2d.drawImage(hero, herox, heroy, null);
+    }
+    
+    @Override
+    public void moveX() {
         heroChangeInPosX = heroChangeInDirX;
         heroChangeInPosY = heroChangeInDirY;
 
@@ -41,7 +55,10 @@ public class Hero extends MinBaseChar{
                 && !checkVertWalls((herox - blockSize / 2) + heroChangeInPosX, heroy)) {
             herox = herox + heroSpeed * heroChangeInPosX;
         }
+    }
 
+    @Override
+    public void moveY() {
         //deals with wall collisions and moves coordinates of hero in y
         if (heroy + heroSpeed * heroChangeInPosY > Grid.getDimension().getHeight() - blockSize * 2) {
             heroy = (int) Grid.getDimension().getHeight() - blockSize * 2 - 1;
@@ -51,12 +68,6 @@ public class Hero extends MinBaseChar{
                 && !checkHorWalls(herox, (heroy + blockSize) + heroChangeInPosY)) {
             heroy = heroy + heroSpeed * heroChangeInPosY;
         }
-
-        //g2d.drawImage(hero, herox, heroy, blockSize, blockSize, this);
-        g2d.setColor(Color.orange);
-        g2d.drawOval(herox, heroy, blockSize, blockSize);
-
-        //g2d.drawImage(hero, herox, heroy, null);
     }
     
     public void checkAlive(int enemyx, int enemyy) {

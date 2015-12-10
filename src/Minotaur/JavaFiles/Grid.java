@@ -2,7 +2,7 @@
 //Authors: Stephen Couturier, Jeremy Peck, Mike Guilmette
 //Version: 0.1
 //The class for the map that everything will move within
-package Minotaur;
+package Minotaur.JavaFiles;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
 
@@ -32,13 +33,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private static boolean dying = false;
     private boolean inGame = false;
     
-    //the x and y coordinates of the vertical inner walls
-    private static int innerVertWallsX[] = new int[50];
-    private static int innerVertWallsY[] = new int[50];
-    
-    //the x and y coordinates of the vertical inner walls
-    private static int innerHorWallsX[] = new int[50];
-    private static int innerHorWallsY[] = new int[50];
+    //array that holds all inner walls
+    ArrayList<Wall> walls = new ArrayList<>();
     
     private final int stairsX = blockSize * 4;
     private final int stairsY = blockSize * 4;
@@ -93,21 +89,21 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
     //puts the inner walls in arrays 
     private void getWalls() {
-        int k = 0;
-        int p = 0;
         for (int i = 0; i < screenData.length; i++) {
             for (int j = 0; j < screenData.length; j++) {
                 if (screenData[j][i] == 1) {
-                    innerVertWallsX[k] = i * blockSize;
-                    innerVertWallsY[k] = j * blockSize;
-                    k++;
+                    Wall wall = new Wall(i * blockSize, j * blockSize , false);
+                    walls.add(wall);
+                    
                 } else if (screenData[j][i] == 3) {
-                    innerHorWallsX[p] = i * blockSize;
-                    innerHorWallsY[p] = j * blockSize;
-                    p++;
+                    Wall wall = new Wall(i * blockSize, j * blockSize , true);
+                    walls.add(wall);
                 }
             }
         }
+        
+        hero.setWalls(walls);
+        enemy.setWalls(walls);
     }
 
     //draws the map
@@ -252,23 +248,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     public static Dimension getDimension() {
         return dim;
     }
-    
-    public static int[] getVertX(){
-        return innerVertWallsX;
-    }
-    
-    public static int[] getVertY(){
-        return innerVertWallsY;
-    }
-    
-    public static int[] getHorX(){
-        return innerHorWallsX;
-    }
-    
-    public static int[] getHorY(){
-        return innerHorWallsY;
-    }
-    
+
     public static void setDying(boolean dying){
         Grid.dying = dying;
     }
