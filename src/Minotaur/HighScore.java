@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import oracle.jrockit.jfr.JFR;
 
 
 public class HighScore {
@@ -63,6 +64,4 @@ public class HighScore {
     public static void showScore(){
         JOptionPane.showMessageDialog(null,"Your score = " + currentScore, "Final Score", 0);
     }
-    
-    
 }
