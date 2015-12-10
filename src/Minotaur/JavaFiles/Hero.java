@@ -69,10 +69,10 @@ public class Hero extends MinBaseChar{
             heroy = heroy + heroSpeed * heroChangeInPosY;
         }
     }
-    
+   
     public void checkAlive(int enemyx, int enemyy) {
-        if (herox < enemyx + blockSize && herox > enemyx + blockSize) {
-            if (heroy < enemyy + blockSize && heroy > enemyy + blockSize) {
+        if (enemyy > heroy && enemyy < heroy + blockSize) {
+            if(enemyx > herox && enemyx <herox + blockSize){
                 Grid.setDying(true);
             }
         }
@@ -86,11 +86,11 @@ public class Hero extends MinBaseChar{
         return heroy;
     }
     
-    public static void setHeroChangeX(int x) {
+    public void setHeroChangeX(int x) {
         Hero.heroChangeInDirX = x;
     }
 
-    public static void setHeroChangeY(int y) {
+    public void setHeroChangeY(int y) {
         Hero.heroChangeInDirY = y;
     }
 }

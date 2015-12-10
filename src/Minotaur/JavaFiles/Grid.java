@@ -10,12 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.Duration;
 import java.util.ArrayList;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
 
-    private boolean levelTime = true;
-    private Timer time;
+    private String timeString = "PT6S";
+    private Duration time = Duration.parse(timeString);
+    private int ticks = 0;
+    private int currentScore = 0;
     //images for the hero and minotaur 
     public Image heropic;
     public ImageIcon hIcon = new ImageIcon("C:\\Users\\mrswe_000\\Desktop\\code\\CapstoneNCC2015TeamJava\\src\\Minotaur");
@@ -63,13 +66,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
         setFocusable(true);
         inGame = true;
-        time = new Timer(60, (ActionEvent evt)
-                -> {
-            if (!time.isRunning()) {
-                levelTime = false;
-            }
-        });
-        time.start();
+        
         startLevel();
         setDoubleBuffered(true);
 
@@ -155,6 +152,20 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 hero.move(g2d);
                 enemy.move(g2d);
                 hero.checkAlive(enemy.getEnemyX(), enemy.getEnemyY());
+                
+                if(ticks > 100){
+                    time = time.minusSeconds(1);
+                    //TODO method to paint time and score
+                    ticks = 0;
+                    currentScore+=100;
+                    System.out.println(time.getSeconds());
+                }
+                paintScore(g2d);
+                ticks++;
+                if(time.getSeconds()<= 0){
+                    drawStairs(g2d);
+                }
+                
                 repaint();
                 Thread.sleep(12);
             }
@@ -177,9 +188,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.fillRect(0, 0, dim.width, dim.height);
         drawMap(g2d);
         playGame(g2d);
-        if (!levelTime) {
-            drawStairs(g2d);
-        }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
     }
@@ -190,7 +198,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     private void death(Graphics2D g2d) {
-        time.stop();
         inGame = false;
 
         g2d.setColor(Color.black);
@@ -249,7 +256,16 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         return dim;
     }
 
-    public static void setDying(boolean dying){
+    public static void setDying(boolean dying) {
         Grid.dying = dying;
+    }
+
+    private void paintScore(Graphics2D g2d) {
+        if (time.getSeconds() >= 0) {
+            g2d.setColor(Color.white);
+            g2d.drawString("Score: " + currentScore + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
+        } else {
+            g2d.drawString("Score: " + currentScore + "pts         Time: 0s", blockSize, blockSize/2);
+        }
     }
 }
