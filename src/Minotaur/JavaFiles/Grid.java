@@ -1,7 +1,7 @@
 //Capstone Project 2015 
 //Authors: Stephen Couturier, Jeremy Peck, Mike Guilmette
-//Version: 0.1
-//The class for the map that everything will move within
+//Version: 1.0
+//The class for the grid that displays on the screen
 package Minotaur.JavaFiles;
 
 import javax.swing.*;
@@ -38,9 +38,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     
     //array that holds all inner walls
     ArrayList<Wall> walls = new ArrayList<>();
+
+    Rectangle stairs = new Rectangle(blockSize * 4, blockSize * 4, blockSize, blockSize);
     
-    private final int stairsX = blockSize * 4;
-    private final int stairsY = blockSize * 4;
 
     private final short[][] screenData = new short[numOfBlocks][numOfBlocks];
     private final short boardData[]
@@ -65,7 +65,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         addKeyListener(this);
 
         setFocusable(true);
-        inGame = true;
         
         startLevel();
         setDoubleBuffered(true);
@@ -143,7 +142,11 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     public void playGame(Graphics2D g2d) throws InterruptedException {
-        if (inGame = true) {
+        if (!inGame != true) {
+            showSplash(g2d);
+            
+        }
+        else{
             if (dying) {
                 death(g2d);
             } else {
@@ -162,6 +165,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 ticks++;
                 if(time.getSeconds()<= 0){
                     drawStairs(g2d);
+                    if(hero.checkWin(stairs)){
+                        goToNextLevel();
+                    }
                 }
                 
                 repaint();
@@ -207,18 +213,22 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
     private void drawStairs(Graphics2D g2d) {
         g2d.setColor(Color.blue);
-        g2d.drawRect(stairsX, stairsY, blockSize, blockSize);
+        g2d.drawRect(stairs.x, stairs.y, stairs.height, stairs.width);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            inGame = true;
+            System.out.println("str");
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
+        System.out.println(e.getKeyCode());
         switch (key) {
             case KeyEvent.VK_LEFT:
                 hero.setHeroChangeX(-1);
@@ -235,6 +245,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             case KeyEvent.VK_DOWN:
                 hero.setHeroChangeX(0);
                 hero.setHeroChangeY(1);
+                break;
+            case 's':
+                inGame = true;
                 break;
             default:
                 break;
@@ -267,5 +280,17 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         } else {
             g2d.drawString("Score: " + currentScore + "pts         Time: 0s", blockSize, blockSize/2);
         }
+    }
+
+    private void showSplash(Graphics2D g2d) {
+        g2d.setColor(Color.black);
+        g2d.fillRect(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
+        g2d.setColor(Color.red);
+        g2d.drawString("MINOTAUR",blockSize * 4, blockSize * 2);
+        g2d.drawString("Press Enter To Start",(blockSize * 3) + blockSize/2, blockSize * 5);
+    }
+
+    private void goToNextLevel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

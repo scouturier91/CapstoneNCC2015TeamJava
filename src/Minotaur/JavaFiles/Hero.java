@@ -28,6 +28,9 @@ public class Hero extends MinBaseChar{
     private static int heroChangeInDirY;
     //speed of the hero
     private int heroSpeed = 1;
+    
+    Rectangle hero = new Rectangle(herox, heroy, blockSize, blockSize);
+    Rectangle enemy = new Rectangle(0, 0, blockSize, blockSize);
 
     @Override
     public void move(Graphics2D g2d) {
@@ -69,12 +72,19 @@ public class Hero extends MinBaseChar{
     }
    
     public void checkAlive(int enemyx, int enemyy) {
-        Rectangle hero = new Rectangle(herox, heroy, blockSize, blockSize);
-        Rectangle enemy = new Rectangle(enemyx, enemyy, blockSize, blockSize);
-       
+        
+       hero.setLocation(herox, heroy);
+       enemy.setLocation(enemyx, enemyy);
         if (enemy.intersects(hero)) {
                 Grid.setDying(true);
         }
+    }
+ 
+    public boolean checkWin(Rectangle stairs) {
+        if (stairs.intersects(hero)){
+            return true;
+        }
+        return false;
     }
     
     public static int getHeroX(){
@@ -92,4 +102,5 @@ public class Hero extends MinBaseChar{
     public void setHeroChangeY(int y) {
         Hero.heroChangeInDirY = y;
     }
+
 }

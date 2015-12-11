@@ -77,15 +77,24 @@ public class Enemy extends MinBaseChar{
             enemyy = 0 + blockSize;
         }
     }
-    
-    public void moveCheckInnerWalls(){
-       if (!checkWalls(enemyx  + enemyChangeInPosX, enemyy)
+
+    public void moveCheckInnerWalls() {
+        if (!checkWalls(enemyx + enemyChangeInPosX, enemyy)
                 && !checkWalls(enemyx + enemyChangeInPosX, enemyy)) {
             enemyx = enemyx + enemyChangeInPosX;
+
+        } else {
+            enemyChangeInPosX = 0;
+            enemyy = enemyy + 1;
+
         }
         if (!checkWalls(enemyx, enemyy + enemyChangeInPosY)
                 && !checkWalls(enemyx, enemyy + enemyChangeInPosY)) {
             enemyy = enemyy + enemySpeed * enemyChangeInPosY;
+        } else {
+            enemyChangeInPosY = 0;
+            enemyx = enemyx + 1;
+
         }
     }
     
