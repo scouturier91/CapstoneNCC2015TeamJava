@@ -219,7 +219,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.drawString("Game Over ", blockSize * 4, blockSize);
         g2d.drawString("Your Score: " + score.currentScore, blockSize * 4, blockSize + 20 );
         
-        
+ /* BEGIN TESTING AREA */       
  /*****************************************************************************************************************/       
         //Initialize fileRead
         BufferedReader fileRead = null;
@@ -231,7 +231,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         // TODO Auto-generated catch block
         e.printStackTrace();
         }
-		
+	
+        // ADD THE CONTENTS OF THE TEXT FILE TO THE LINKEDLIST
         try {
             for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
                 score.scores.add(line);
@@ -240,11 +241,13 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
         }      
         
+        // TEST TO SEE IF SCORE IS BEING ADDED TO THE LIST AT THE RIGHT POSITION
         score.scores.add(3,Integer.toString(HighScore.currentScore));
         for (int i = 0; i < 10; i++){
             System.out.println(score.scores.get(i));
         }
         
+        // SORTS THE LIST THEN DISPLAYS IT
         Collections.sort(score.scores, new AlphanumComparator());
         int score_pos = blockSize + 40;
         for (int i = 0; i < 11; i++){            
