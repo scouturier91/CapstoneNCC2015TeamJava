@@ -18,7 +18,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private String timeString = "PT6S";
     private Duration time = Duration.parse(timeString);
     private int ticks = 0;
-    private int currentScore = 0;
+  
     //images for the hero and minotaur 
     public Image heropic;
     public ImageIcon hIcon = new ImageIcon("C:\\Users\\mrswe_000\\Desktop\\code\\CapstoneNCC2015TeamJava\\src\\Minotaur");
@@ -42,6 +42,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     Rectangle stairs = new Rectangle(blockSize * 4, blockSize * 4, blockSize, blockSize);
     
 
+    HighScore score = new HighScore();
+    
     private final short[][] screenData = new short[numOfBlocks][numOfBlocks];
     private final short boardData[]
             = {
@@ -158,7 +160,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                     time = time.minusSeconds(1);
                     //TODO method to paint time and score
                     ticks = 0;
-                    currentScore+=100;
+                    score.currentScore+=100;
                     System.out.println(time.getSeconds());
                 }
                 paintScore(g2d);
@@ -208,7 +210,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.fillRect(0, 0, dim.width, dim.height);
         g2d.setColor(Color.white);
         g2d.drawString("Game Over ", blockSize * 4, blockSize);
-
+        g2d.drawString("Your Score: " + score.currentScore, blockSize * 4, blockSize + 20 );
     }
 
     private void drawStairs(Graphics2D g2d) {
@@ -276,9 +278,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private void paintScore(Graphics2D g2d) {
         if (time.getSeconds() >= 0) {
             g2d.setColor(Color.white);
-            g2d.drawString("Score: " + currentScore + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
+            g2d.drawString("Score: " + score.currentScore + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
         } else {
-            g2d.drawString("Score: " + currentScore + "pts         Time: 0s", blockSize, blockSize/2);
+            g2d.drawString("Score: " + score.currentScore + "pts         Time: 0s", blockSize, blockSize/2);
         }
     }
 
