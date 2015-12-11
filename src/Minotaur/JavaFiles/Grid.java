@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
-
+    
     private String timeString = "PT6S";
     private Duration time = Duration.parse(timeString);
     private int ticks = 0;
@@ -120,8 +120,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                     case 3:
                         g.setColor(Color.green);
                         g.drawLine(i * blockSize, j * blockSize, (i * blockSize) + blockSize, j * blockSize);
-                        //g.drawLine(i * blockSize, j * blockSize , i * blockSize, j * blockSize);
-                        //g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);  
                         break;
                     default:
                         break;
@@ -202,6 +200,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, dim.width, dim.height);
+        g2d.setColor(Color.white);
+        g2d.drawString("Game Over ", blockSize * 4, blockSize);
 
     }
 

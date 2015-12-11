@@ -5,9 +5,9 @@
  */
 package Minotaur.JavaFiles;
 
-import Minotaur.JavaFiles.MinBaseChar;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  *
@@ -31,50 +31,49 @@ public class Hero extends MinBaseChar{
 
     @Override
     public void move(Graphics2D g2d) {
-        moveX();
-        moveY();
-        
+        moveCheckBorders();
+        moveCheckInnerWalls();
+  
         //g2d.drawImage(hero, herox, heroy, blockSize, blockSize, this);
         g2d.setColor(Color.orange);
-        g2d.drawOval(herox, heroy, blockSize, blockSize);
-
+        g2d.fillRect(herox, heroy, blockSize, blockSize);
         //g2d.drawImage(hero, herox, heroy, null);
     }
     
     @Override
-    public void moveX() {
+    public void moveCheckBorders() {
         heroChangeInPosX = heroChangeInDirX;
         heroChangeInPosY = heroChangeInDirY;
-
-        //deals with wall collisions and moves coordinates of hero in x 
+        
         if (herox + heroSpeed * heroChangeInPosX > Grid.getDimension().getWidth() - blockSize * 2) {
             herox = (int) Grid.getDimension().getWidth() - blockSize * 2 - 1;
         } else if (herox + heroSpeed * heroChangeInPosX < 0 + blockSize) {
             herox = 0 + blockSize;
-        } else if (!checkVertWalls((herox + blockSize / 2) + heroChangeInPosX, heroy)
-                && !checkVertWalls((herox - blockSize / 2) + heroChangeInPosX, heroy)) {
-            herox = herox + heroSpeed * heroChangeInPosX;
-        }
-    }
-
-    @Override
-    public void moveY() {
-        //deals with wall collisions and moves coordinates of hero in y
-        if (heroy + heroSpeed * heroChangeInPosY > Grid.getDimension().getHeight() - blockSize * 2) {
+        }else if (heroy + heroSpeed * heroChangeInPosY > Grid.getDimension().getHeight() - blockSize * 2) {
             heroy = (int) Grid.getDimension().getHeight() - blockSize * 2 - 1;
         } else if (heroy + heroChangeInPosY < 0 + blockSize) {
             heroy = 0 + blockSize;
-        } else if (!checkHorWalls(herox, heroy + heroChangeInPosY)
-                && !checkHorWalls(herox, (heroy + blockSize) + heroChangeInPosY)) {
+        }      
+    }
+
+    @Override
+    public void moveCheckInnerWalls() {
+        if (!checkWalls(herox  + heroChangeInPosX, heroy)
+                && !checkWalls(herox + heroChangeInPosX, heroy)) {
+            herox = herox + heroChangeInPosX;
+        }
+        if (!checkWalls(herox, heroy + heroChangeInPosY)
+                && !checkWalls(herox, heroy + heroChangeInPosY)) {
             heroy = heroy + heroSpeed * heroChangeInPosY;
         }
     }
    
     public void checkAlive(int enemyx, int enemyy) {
-        if (enemyy > heroy && enemyy < heroy + blockSize) {
-            if(enemyx > herox && enemyx <herox + blockSize){
+        Rectangle hero = new Rectangle(herox, heroy, blockSize, blockSize);
+        Rectangle enemy = new Rectangle(enemyx, enemyy, blockSize, blockSize);
+       
+        if (enemy.intersects(hero)) {
                 Grid.setDying(true);
-            }
         }
     }
     

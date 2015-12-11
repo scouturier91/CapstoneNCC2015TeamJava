@@ -6,6 +6,8 @@
 package Minotaur.JavaFiles;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 /**
@@ -25,40 +27,25 @@ public abstract class MinBaseChar {
     
     public abstract void move(Graphics2D g2d);
     
-    public abstract void moveX();
+    public abstract void moveCheckBorders();
     
-    public abstract void moveY();
+    public abstract void moveCheckInnerWalls();
 
     //checks whether the sprite is colliding with a vertical wall inside the maze
-    public boolean checkVertWalls(int x, int y) {
+    public boolean checkWalls(int x, int y) {
+        Rectangle sprite = new Rectangle(x, y, blockSize, blockSize);
         for (int i = 0; i < walls.size(); i++) {
-            if (!walls.get(i).isHorz()) {
-                if (walls.get(i).getX() == x) {
-                    if (y > walls.get(i).getY() - blockSize && y < walls.get(i).getY() + blockSize) {
-                        //System.out.println("x " + walls.get(i).getX() + "y " + innerVertWallsY[i]);
-                        return true;
-                    }
-                } else if (x > walls.get(i).getX() && x + blockSize < walls.get(i).getX()) {
+            if (walls.get(i).isHorz()) {
+                Line2D line = new Line2D.Float(walls.get(i).getX(), walls.get(i).getY(),
+                        walls.get(i).getX() + blockSize, walls.get(i).getY());
+                if (line.intersects(sprite)) {
                     return true;
                 }
             }
-        }
-        return false;
-    }
-
-    //checks whether the sprite is colliding with a horizontal wall inside the maze
-    public boolean checkHorWalls(int x, int y) {
-        for (int i = 0; i < walls.size(); i++) {
-            if (walls.get(i).isHorz()) {
-                //check the y coordinates to see if there is a wall on that axis
-                if (walls.get(i).getY() == y) {
-                    //check the x coordinates to see if there is wall within the coordinates of the next move
-                    if (x > walls.get(i).getX() - blockSize && x < walls.get(i).getX() + blockSize) {
-                        //System.out.println("x " + innerHorWallsX[i] + "y " + innerHorWallsY[i]);
-                        return true;
-                    }
-                } else if (y > walls.get(i).getY() && y + blockSize < walls.get(i).getY()) {
-                    System.out.println("x " + walls.get(i).getX() + "y " + walls.get(i).getY());
+            if(!walls.get(i).isHorz()){
+                Line2D line2 = new Line2D.Float(walls.get(i).getX()+ blockSize/2, walls.get(i).getY(),
+                        walls.get(i).getX() + blockSize/2, walls.get(i).getY() + blockSize);
+                if (line2.intersects(sprite)) {
                     return true;
                 }
             }

@@ -33,10 +33,10 @@ public class Enemy extends MinBaseChar{
     
     @Override
     public void move(Graphics2D g2d) {
-        determineDir();
         
-        moveX();
-        moveY();
+        determineDir();
+        moveCheckBorders();
+        moveCheckInnerWalls();
         
         g2d.setColor(Color.red);
         g2d.drawOval(enemyx, enemyy, blockSize, blockSize);
@@ -47,13 +47,12 @@ public class Enemy extends MinBaseChar{
         enemyChangeInDirX = 0;
         enemyChangeInDirY = 0;
 
-        if (enemyChangeInDirY == 0) {
-            if (Hero.getHeroX() > enemyx) {
-                enemyChangeInDirX = 1;
-            } else if (Hero.getHeroX() < enemyx) {
-                enemyChangeInDirX = -1;
-            }
+        if (Hero.getHeroX() > enemyx) {
+            enemyChangeInDirX = 1;
+        } else if (Hero.getHeroX() < enemyx) {
+            enemyChangeInDirX = -1;
         }
+
         if (enemyChangeInDirX == 0) {
             if (Hero.getHeroY() > enemyy) {
                 enemyChangeInDirY = 1;
@@ -66,35 +65,27 @@ public class Enemy extends MinBaseChar{
         enemyChangeInPosY = enemyChangeInDirY;
     }
     
-    public void moveX(){
+    public void moveCheckBorders(){
         //deals with wall collisions and moves coordinates of enemy in x 
         if (enemyx + enemySpeed * enemyChangeInPosX > Grid.getDimension().getWidth() - blockSize * 2) {
             enemyx = (int) Grid.getDimension().getWidth() - blockSize * 2 - 1;
         } else if (enemyx + enemySpeed * enemyChangeInPosX < 0 + blockSize) {
             enemyx = 0 + blockSize;
-        } else if (!checkVertWalls((enemyx + blockSize / 2) + 1 * enemyChangeInPosX, enemyy)
-                && !checkVertWalls((enemyx - blockSize / 2) + 1 * enemyChangeInPosX, enemyy)) {
-            enemyx = enemyx + enemySpeed * enemyChangeInPosX;
-        } else {
-            enemyy = enemyy + enemySpeed * enemyChangeInPosX;
-        }
-    }
-    
-    public void moveY(){
-        //deals with wall collisions and moves coordinates of hero in y
-        if (enemyy + enemySpeed * enemyChangeInPosY > Grid.getDimension().getHeight() - blockSize * 2) {
+        } else if (enemyy + enemySpeed * enemyChangeInPosY > Grid.getDimension().getHeight() - blockSize * 2) {
             enemyy = (int) Grid.getDimension().getHeight() - blockSize * 2 - 1;
         } else if (enemyy + enemySpeed * enemyChangeInPosY < 0 + blockSize) {
             enemyy = 0 + blockSize;
-        } else {
-            if (!checkHorWalls(enemyx, enemyy + enemySpeed * enemyChangeInPosY)
-                    && !checkHorWalls(enemyx, (enemyy + blockSize) + enemySpeed * enemyChangeInPosY)) {
-                enemyy = enemyy + enemySpeed * enemyChangeInPosY;
-            } else {
-                {
-                    enemyx = enemyx + enemySpeed * enemyChangeInPosY;
-                }
-            }   
+        }
+    }
+    
+    public void moveCheckInnerWalls(){
+       if (!checkWalls(enemyx  + enemyChangeInPosX, enemyy)
+                && !checkWalls(enemyx + enemyChangeInPosX, enemyy)) {
+            enemyx = enemyx + enemyChangeInPosX;
+        }
+        if (!checkWalls(enemyx, enemyy + enemyChangeInPosY)
+                && !checkWalls(enemyx, enemyy + enemyChangeInPosY)) {
+            enemyy = enemyy + enemySpeed * enemyChangeInPosY;
         }
     }
     
