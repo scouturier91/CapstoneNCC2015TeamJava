@@ -34,12 +34,16 @@ public class HighScore {
 
     //Creates a blank (ten 0s) scores.txt
     public static void createFile(File f) throws FileNotFoundException{
+        try{
 	PrintWriter outFile = new PrintWriter(f);
 	for (int i = 0; i < 10; i++){
             outFile.println("0");
 	}
 	outFile.close();
-	}
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 
     // Create the Linked List using the contents of C:\scores.txt	
     public static void file2list(LinkedList<String> scores) throws IOException{

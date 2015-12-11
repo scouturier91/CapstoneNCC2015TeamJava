@@ -27,10 +27,11 @@ public class Hero extends MinBaseChar{
     private static int heroChangeInDirX;
     private static int heroChangeInDirY;
     //speed of the hero
-    private int heroSpeed = 1;
+    private int heroSpeed = 3;
     
     Rectangle hero = new Rectangle(herox, heroy, blockSize, blockSize);
     Rectangle enemy = new Rectangle(0, 0, blockSize, blockSize);
+    Rectangle stairs = new Rectangle();//todo
 
     @Override
     public void move(Graphics2D g2d) {
@@ -63,7 +64,7 @@ public class Hero extends MinBaseChar{
     public void moveCheckInnerWalls() {
         if (!checkWalls(herox  + heroChangeInPosX, heroy)
                 && !checkWalls(herox + heroChangeInPosX, heroy)) {
-            herox = herox + heroChangeInPosX;
+            herox = herox + heroChangeInPosX * heroSpeed;
         }
         if (!checkWalls(herox, heroy + heroChangeInPosY)
                 && !checkWalls(herox, heroy + heroChangeInPosY)) {

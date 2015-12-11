@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
     
-    private String timeString = "PT6S";
+    private final String timeString = "PT6S";
     private Duration time = Duration.parse(timeString);
     private int ticks = 0;
   
@@ -173,7 +173,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 }
                 
                 repaint();
-                Thread.sleep(12);
+                Thread.sleep(20);
             }
         }
     }

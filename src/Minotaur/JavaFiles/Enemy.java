@@ -5,9 +5,6 @@
  */
 package Minotaur.JavaFiles;
 
-import Minotaur.JavaFiles.Grid;
-import Minotaur.JavaFiles.Hero;
-import Minotaur.JavaFiles.MinBaseChar;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -81,11 +78,16 @@ public class Enemy extends MinBaseChar{
     public void moveCheckInnerWalls() {
         if (!checkWalls(enemyx + enemyChangeInPosX, enemyy)
                 && !checkWalls(enemyx + enemyChangeInPosX, enemyy)) {
-            enemyx = enemyx + enemyChangeInPosX;
+            enemyx = enemyx + enemyChangeInPosX * enemySpeed;
 
         } else {
             enemyChangeInPosX = 0;
-            enemyy = enemyy + 1;
+            //enemyy = enemyy + 1;
+            if (enemyy <= Hero.getHeroY()){
+                enemyy = enemyy + 1;
+            }else {
+                enemyy = enemyy -1;
+            }
 
         }
         if (!checkWalls(enemyx, enemyy + enemyChangeInPosY)
@@ -93,8 +95,11 @@ public class Enemy extends MinBaseChar{
             enemyy = enemyy + enemySpeed * enemyChangeInPosY;
         } else {
             enemyChangeInPosY = 0;
-            enemyx = enemyx + 1;
-
+            if (enemyx <= Hero.getHeroX()){
+                enemyx = enemyx + 1;
+            }else {
+                enemyx = enemyx - 1;
+            }
         }
     }
     
