@@ -4,8 +4,6 @@ import java.util.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-
 
 public class HighScore {
     public static int currentScore;
@@ -62,9 +60,5 @@ public class HighScore {
         for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
             scores.add(line);
         }
-    }
-
-    public static void showScore(){
-        JOptionPane.showMessageDialog(null,"Your score = " + currentScore, "Final Score", 0);
     }
 }
