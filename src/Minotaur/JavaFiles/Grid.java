@@ -10,8 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
     
@@ -211,6 +218,41 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.setColor(Color.white);
         g2d.drawString("Game Over ", blockSize * 4, blockSize);
         g2d.drawString("Your Score: " + score.currentScore, blockSize * 4, blockSize + 20 );
+        
+        
+ /*****************************************************************************************************************/       
+        //Initialize fileRead
+        BufferedReader fileRead = null;
+			
+        try {
+            fileRead = new BufferedReader(new FileReader("C:\\scores.txt"));
+            System.out.println("Read Successful");
+        } catch (FileNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        }
+		
+        try {
+            for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
+                score.scores.add(line);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+        
+        score.scores.add(3,Integer.toString(HighScore.currentScore));
+        for (int i = 0; i < 10; i++){
+            System.out.println(score.scores.get(i));
+        }
+        
+        Collections.sort(score.scores, new AlphanumComparator());
+        int score_pos = blockSize + 40;
+        for (int i = 0; i < 11; i++){            
+            g2d.drawString(i+1 + ": " + score.scores.get(i), blockSize * 4, score_pos );
+            score_pos = score_pos + 20;
+        }
+/*****************************************************************************************************************/    
+
     }
 
     private void drawStairs(Graphics2D g2d) {

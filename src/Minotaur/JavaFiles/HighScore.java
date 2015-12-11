@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HighScore {
+    LinkedList<String> scores = new LinkedList<String>();
     public static int currentScore;
     
     // Constructor creates a File f then checks to see if it exists
