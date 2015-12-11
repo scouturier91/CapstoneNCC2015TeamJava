@@ -221,6 +221,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             g2d.setColor(Color.white);
             g2d.drawString("Game Over ", blockSize * 4, blockSize);
             g2d.drawString("Your Score: " + score.currentScore, blockSize * 4, blockSize + 20 );
+            
 /* BEGIN TESTING AREA */
 /*****************************************************************************************************************/
             //Initialize fileRead
@@ -240,22 +241,19 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             } catch (IOException ex) {
                 Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // TEST TO SEE IF SCORE IS BEING ADDED TO THE LIST AT THE RIGHT POSITION
-            score.scores.add(3,Integer.toString(HighScore.currentScore));
-            for (int i = 0; i < 10; i++){
-                System.out.println(score.scores.get(i));
-            }
+            score.scores.add(Integer.toString(HighScore.currentScore));
             // SORTS THE LIST THEN DISPLAYS IT
             Collections.sort(score.scores, new AlphanumComparator());
             Collections.reverse(score.scores);
-            int score_pos = blockSize + 40;
+            g2d.drawString("TOP 10 SCORES", blockSize * 4, blockSize + 80);
+            int score_pos = blockSize + 100;
             for (int i = 0; i < 10; i++){
                 g2d.drawString(i+1 + ": " + score.scores.get(i), blockSize * 4, score_pos );
                 score_pos = score_pos + 20;
             }
             out = new BufferedWriter(new FileWriter("C:\\scores.txt"));
-            for(String s:score.scores) {
-                out.write(s+'\n');                
+            for(int i = 0; i < 10; i++) {
+                out.write(score.scores.get(i)+'\n');                
             }
             out.close();
         } catch (IOException ex) {
