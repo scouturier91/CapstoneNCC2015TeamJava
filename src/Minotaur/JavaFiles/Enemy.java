@@ -23,7 +23,7 @@ public class Enemy extends MinBaseChar{
     private final int blockSize = Grid.blockSize;
     
     private final int startCoordinateX = blockSize * 4;
-    private final int startCoordinateY = blockSize * 5;
+    private final int startCoordinateY = blockSize * 6;
     //x and y coordinates of the enemy
     private int enemyx = startCoordinateX;
     private int enemyy = startCoordinateY;
@@ -40,7 +40,7 @@ public class Enemy extends MinBaseChar{
     @Override
     public void move(Graphics2D g2d) {
         
-        determineDir();
+        //determineDir();
         moveCheckBorders();
         moveCheckInnerWalls();
         

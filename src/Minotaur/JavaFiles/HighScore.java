@@ -1,5 +1,6 @@
 package Minotaur.JavaFiles;
 
+import java.awt.Graphics2D;
 import java.util.*;
 import java.io.*;
 import java.util.logging.Level;
@@ -63,15 +64,55 @@ public class HighScore {
         }
     }
     
-    public int getCurrentScore(){
-        return currentScore;
+    public void showHighScores(Graphics2D g2d) {
+        /* BEGIN TESTING AREA */
+        /**
+         * **************************************************************************************************************
+         */
+        BufferedWriter out = null;
+        try {
+            //Initialize fileRead
+            BufferedReader fileRead = null;
+            try {
+                fileRead = new BufferedReader(new FileReader("scores.txt"));
+                System.out.println("Read Successful");
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            // ADD THE CONTENTS OF THE TEXT FILE TO THE LINKEDLIST
+            try {
+                for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
+                    scores.add(line);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            scores.add(Integer.toString(currentScore));
+            // SORTS THE LIST THEN DISPLAYS IT
+            Collections.sort(scores, new AlphanumComparator());
+            Collections.reverse(scores);
+            g2d.drawString("TOP 10 SCORES", Grid.getBlockSize() * 4, Grid.getBlockSize() + 80);
+            int score_pos = Grid.getBlockSize() + 100;
+            for (int i = 0; i < 10; i++) {
+                g2d.drawString(i + 1 + ": " + scores.get(i), Grid.getBlockSize() * 4, score_pos);
+                score_pos = score_pos + 20;
+            }
+            out = new BufferedWriter(new FileWriter("scores.txt"));
+            for (int i = 0; i < 10; i++) {
+                out.write(scores.get(i) + '\n');
+            }
+            out.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
+    /*****************************************************************************************************************/
     
-    public void setCurrentScore(int score){
-        this.currentScore = score; 
-    }
-    
-    public LinkedList<String> getScores(){
-        return scores;
-    }
 }
