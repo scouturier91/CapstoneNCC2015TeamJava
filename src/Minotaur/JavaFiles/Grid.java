@@ -16,6 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +32,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
   
     //images for the hero and minotaur 
     public Image heropic;
-    public ImageIcon hIcon = new ImageIcon("C:\\Users\\mrswe_000\\Desktop\\code\\CapstoneNCC2015TeamJava\\src\\Minotaur");
+    //InputStream heroIS = this.getClass().getClassLoader().getResourceAsStream("src/Minotaur/Resources/hero.jpg");
+    
+    public ImageIcon hIcon = new ImageIcon();
     
     private Image minotaur;
     private Hero hero;
@@ -154,8 +158,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
     public void playGame(Graphics2D g2d) throws InterruptedException {
         if (!inGame != true) {
-            showSplash(g2d);
-            
+            showSplash(g2d);    
         }
         else{
             if (dying) {
@@ -170,7 +173,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                     //TODO method to paint time and score
                     ticks = 0;
                     score.currentScore+=100;
-                    System.out.println(time.getSeconds());
                 }
                 paintScore(g2d);
                 ticks++;
@@ -191,7 +193,11 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         try {
-            drawBoard((Graphics2D) g);
+            if (inGame != true){
+                drawBoard((Graphics2D) g);
+            } else {
+                showSplash((Graphics2D) g);
+            }
         } catch (InterruptedException ex) {
 
             ex.printStackTrace();
@@ -286,7 +292,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        System.out.println(e.getKeyCode());
+        //System.out.println(e.getKeyCode());
         switch (key) {
             case KeyEvent.VK_LEFT:
                 hero.setHeroChangeX(-1);
@@ -304,11 +310,12 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 hero.setHeroChangeX(0);
                 hero.setHeroChangeY(1);
                 break;
-            case 's':
-                inGame = true;
-                break;
             default:
                 break;
+        }
+        
+        if (key == KeyEvent.VK_ENTER){
+            startGame();
         }
     }
 
@@ -332,11 +339,10 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     private void paintScore(Graphics2D g2d) {
+        g2d.setColor(Color.white);
         if (time.getSeconds() >= 0) {
-            g2d.setColor(Color.white);
             g2d.drawString("Score: " + score.currentScore + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
-        } else {
-            g2d.setColor(Color.white);
+        } else {          
             g2d.drawString("Score: " + score.currentScore + "pts         Time: 0s", blockSize, blockSize/2);
         }
     }
@@ -350,6 +356,15 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     private void goToNextLevel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        time = Duration.parse(timeString);
+        hero.resetPos();
+        enemy.resetPos();
+        hero.increaseSpeed();
+        enemy.increaseSpeed();
+    }
+
+    private void startGame() {
+        inGame = true;
+        //drawBoard();
     }
 }

@@ -15,9 +15,12 @@ import java.awt.Graphics2D;
 public class Enemy extends MinBaseChar{
     
     private final int blockSize = Grid.blockSize;
+    
+    private final int startCoordinateX = blockSize * 4;
+    private final int startCoordinateY = blockSize * 5;
     //x and y coordinates of the enemy
-    private int enemyx = blockSize * 4;
-    private int enemyy = blockSize * 5;
+    private int enemyx = startCoordinateX;
+    private int enemyy = startCoordinateY;
     //change in position of the enemy in the x direction
     private int enemyChangeInPosX;
     //change in position of the enemy in the y direction
@@ -107,5 +110,16 @@ public class Enemy extends MinBaseChar{
     }
     public int getEnemyY(){
         return enemyy;
+    }
+
+    @Override
+    public void increaseSpeed() {
+        this.enemySpeed++;
+    }
+
+    @Override
+    public void resetPos() {
+        enemyx = startCoordinateX;
+        enemyy = startCoordinateY;
     }
 }

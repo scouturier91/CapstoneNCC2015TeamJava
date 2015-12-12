@@ -16,9 +16,14 @@ import java.awt.Rectangle;
 public class Hero extends MinBaseChar{
     
     private static final int blockSize = Grid.blockSize;
+    
+    private static final int startCoordinateX =  blockSize * 4;
+    private static final int startCoordinateY =  blockSize;
+    
     //x and y coordinates of the hero
-    private static int herox = blockSize * 4;
-    private static int heroy = blockSize;
+    private static int herox = startCoordinateX;
+    private static int heroy = startCoordinateY;
+    
     //change in position of the hero in the x direction
     private int heroChangeInPosX;
      //change in position of the hero in the y direction
@@ -104,4 +109,16 @@ public class Hero extends MinBaseChar{
         Hero.heroChangeInDirY = y;
     }
 
+    @Override
+    public void increaseSpeed() {
+       this.heroSpeed++;
+    }
+
+    @Override
+    public void resetPos() {
+        herox = startCoordinateX;
+        heroy = startCoordinateY;
+    }
+
+    
 }
