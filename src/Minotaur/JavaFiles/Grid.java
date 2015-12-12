@@ -2,6 +2,7 @@
 //Authors: Stephen Couturier, Jeremy Peck, Mike Guilmette
 //Version: 1.0
 //The class for the grid that displays on the screen
+
 package Minotaur.JavaFiles;
 
 import javax.swing.*;

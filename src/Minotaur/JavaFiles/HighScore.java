@@ -1,3 +1,8 @@
+//Capstone Project 2015 
+//Authors: Stephen Couturier, Jeremy Peck, Mike Guilmette
+//Version: 1.0
+//Class for handling and diplaying the high score
+
 package Minotaur.JavaFiles;
 
 import java.awt.Graphics2D;
@@ -60,16 +65,12 @@ public class HighScore {
         }
 		
         for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
-            scores.add(line);
+            scores.add(line);       
         }
-    }
+    } 
     
     //shows the high scores when death is reached
     public void showHighScores(Graphics2D g2d) {
-        /* BEGIN TESTING AREA */
-        /**
-         * **************************************************************************************************************
-         */
         BufferedWriter out = null;
         try {
             //Initialize fileRead
@@ -113,7 +114,5 @@ public class HighScore {
                 Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-    /*****************************************************************************************************************/
-    
+    }    
 }
