@@ -4,10 +4,9 @@ import java.util.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-
 
 public class HighScore {
+    LinkedList<String> scores = new LinkedList<String>();
     public static int currentScore;
     
     // Constructor creates a File f then checks to see if it exists
@@ -62,9 +61,5 @@ public class HighScore {
         for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
             scores.add(line);
         }
-    }
-
-    public static void showScore(){
-        JOptionPane.showMessageDialog(null,"Your score = " + currentScore, "Final Score", 0);
     }
 }

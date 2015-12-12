@@ -10,8 +10,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
     
@@ -204,15 +213,62 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     private void death(Graphics2D g2d) {
-        inGame = false;
-
-        g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, dim.width, dim.height);
-        g2d.setColor(Color.white);
-        g2d.drawString("Game Over ", blockSize * 4, blockSize);
-        g2d.drawString("Your Score: " + score.currentScore, blockSize * 4, blockSize + 20 );
+        BufferedWriter out = null;
+        try {
+            inGame = false;
+            g2d.setColor(Color.black);
+            g2d.fillRect(0, 0, dim.width, dim.height);
+            g2d.setColor(Color.white);
+            g2d.drawString("Game Over ", blockSize * 4, blockSize);
+            g2d.drawString("Your Score: " + score.currentScore, blockSize * 4, blockSize + 20 );
+            
+/* BEGIN TESTING AREA */
+/*****************************************************************************************************************/
+            //Initialize fileRead
+            BufferedReader fileRead = null;
+            try {
+                fileRead = new BufferedReader(new FileReader("C:\\scores.txt"));
+                System.out.println("Read Successful");
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            // ADD THE CONTENTS OF THE TEXT FILE TO THE LINKEDLIST
+            try {
+                for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
+                    score.scores.add(line);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            score.scores.add(Integer.toString(HighScore.currentScore));
+            // SORTS THE LIST THEN DISPLAYS IT
+            Collections.sort(score.scores, new AlphanumComparator());
+            Collections.reverse(score.scores);
+            g2d.drawString("TOP 10 SCORES", blockSize * 4, blockSize + 80);
+            int score_pos = blockSize + 100;
+            for (int i = 0; i < 10; i++){
+                g2d.drawString(i+1 + ": " + score.scores.get(i), blockSize * 4, score_pos );
+                score_pos = score_pos + 20;
+            }
+            out = new BufferedWriter(new FileWriter("C:\\scores.txt"));
+            for(int i = 0; i < 10; i++) {
+                out.write(score.scores.get(i)+'\n');                
+            }
+            out.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }    
     }
-
+/*****************************************************************************************************************/
+    
+    
     private void drawStairs(Graphics2D g2d) {
         g2d.setColor(Color.blue);
         g2d.drawRect(stairs.x, stairs.y, stairs.height, stairs.width);

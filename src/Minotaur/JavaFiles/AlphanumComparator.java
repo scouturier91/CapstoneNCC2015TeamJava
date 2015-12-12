@@ -128,5 +128,3 @@ public class AlphanumComparator implements Comparator
         return s1Length - s2Length;
     }
 }
-
-
