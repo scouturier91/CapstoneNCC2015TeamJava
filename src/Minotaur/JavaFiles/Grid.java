@@ -280,6 +280,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             g2d.setColor(Color.white);
             g2d.drawString("Score: " + score.currentScore + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
         } else {
+            g2d.setColor(Color.white);
             g2d.drawString("Score: " + score.currentScore + "pts         Time: 0s", blockSize, blockSize/2);
         }
     }

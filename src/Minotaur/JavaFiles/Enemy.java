@@ -82,7 +82,6 @@ public class Enemy extends MinBaseChar{
 
         } else {
             enemyChangeInPosX = 0;
-            //enemyy = enemyy + 1;
             if (enemyy <= Hero.getHeroY()){
                 enemyy = enemyy + 1;
             }else {
