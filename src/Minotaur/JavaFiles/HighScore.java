@@ -7,12 +7,12 @@ import java.util.logging.Logger;
 
 public class HighScore {
     LinkedList<String> scores = new LinkedList<String>();
-    public static int currentScore;
+    public int currentScore;
     
     // Constructor creates a File f then checks to see if it exists
     // Also initializes the currentScore variable to 0
     public HighScore (){
-        File f = new File("C:\\scores.txt");
+        File f = new File("scores.txt");
         try {
             this.checkFile(f);
         } catch (FileNotFoundException ex) {
@@ -51,7 +51,7 @@ public class HighScore {
         BufferedReader fileRead = null;
 			
         try {
-            fileRead = new BufferedReader(new FileReader("C:\\scores.txt"));
+            fileRead = new BufferedReader(new FileReader("scores.txt"));
             System.out.println("Read Successful");
         } catch (FileNotFoundException e) {
         // TODO Auto-generated catch block
@@ -61,5 +61,17 @@ public class HighScore {
         for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
             scores.add(line);
         }
+    }
+    
+    public int getCurrentScore(){
+        return currentScore;
+    }
+    
+    public void setCurrentScore(int score){
+        this.currentScore = score; 
+    }
+    
+    public LinkedList<String> getScores(){
+        return scores;
     }
 }

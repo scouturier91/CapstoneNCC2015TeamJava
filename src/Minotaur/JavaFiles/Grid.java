@@ -222,7 +222,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             //Initialize fileRead
             BufferedReader fileRead = null;
             try {
-                fileRead = new BufferedReader(new FileReader("C:\\scores.txt"));
+                fileRead = new BufferedReader(new FileReader("scores.txt"));
                 System.out.println("Read Successful");
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
@@ -231,22 +231,22 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             // ADD THE CONTENTS OF THE TEXT FILE TO THE LINKEDLIST
             try {
                 for (String line = fileRead.readLine(); line != null; line = fileRead.readLine()) {
-                    score.scores.add(line);
+                    score.getScores().add(line);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
             }
-            score.scores.add(Integer.toString(HighScore.currentScore));
+            score.scores.add(Integer.toString(score.getCurrentScore()));
             // SORTS THE LIST THEN DISPLAYS IT
-            Collections.sort(score.scores, new AlphanumComparator());
-            Collections.reverse(score.scores);
+            Collections.sort(score.getScores(), new AlphanumComparator());
+            Collections.reverse(score.getScores());
             g2d.drawString("TOP 10 SCORES", blockSize * 4, blockSize + 80);
             int score_pos = blockSize + 100;
             for (int i = 0; i < 10; i++){
-                g2d.drawString(i+1 + ": " + score.scores.get(i), blockSize * 4, score_pos );
+                g2d.drawString(i+1 + ": " + score.getScores().get(i), blockSize * 4, score_pos );
                 score_pos = score_pos + 20;
             }
-            out = new BufferedWriter(new FileWriter("C:\\scores.txt"));
+            out = new BufferedWriter(new FileWriter("scores.txt"));
             for(int i = 0; i < 10; i++) {
                 out.write(score.scores.get(i)+'\n');                
             }
@@ -339,8 +339,13 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
         g2d.setColor(Color.red);
-        g2d.drawString("MINOTAUR",blockSize * 4, blockSize * 2);
-        g2d.drawString("Press Enter To Start",(blockSize * 3) + blockSize/2, blockSize * 5);
+        Font fontText = new Font("Helvetica", Font.PLAIN, 15);
+        Font fontTitle = new Font("Helvetica", Font.BOLD, 30);
+        g2d.setFont(fontTitle);
+        g2d.drawString("MINOTAUR", blockSize * 3, blockSize * 2);
+        g2d.setFont(fontText);
+        g2d.drawString("A Team JAVA Production", blockSize * 3, blockSize * 4);
+        g2d.drawString("   Press Enter To Start",blockSize *3, blockSize * 6);
     }
 
     private void goToNextLevel() {
