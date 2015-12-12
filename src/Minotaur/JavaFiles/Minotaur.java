@@ -22,6 +22,7 @@ public class Minotaur extends JFrame {
     }
 
     public static void main(String[] args) {
+   
         EventQueue.invokeLater(() -> {
             Minotaur min = new Minotaur();
         });

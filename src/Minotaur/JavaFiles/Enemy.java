@@ -40,7 +40,7 @@ public class Enemy extends MinBaseChar{
     @Override
     public void move(Graphics2D g2d) {
         
-        //determineDir();
+        determineDir();
         moveCheckBorders();
         moveCheckInnerWalls();
         

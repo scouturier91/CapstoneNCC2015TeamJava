@@ -64,6 +64,7 @@ public class HighScore {
         }
     }
     
+    //shows the high scores when death is reached
     public void showHighScores(Graphics2D g2d) {
         /* BEGIN TESTING AREA */
         /**

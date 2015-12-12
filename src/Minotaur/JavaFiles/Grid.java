@@ -10,15 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +40,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     //checks to see whether the hero is still alive
     private static boolean dying = false;
     private boolean inGame = false;
+    private boolean delay = false;
     
     //array that holds all inner walls
     ArrayList<Wall> walls = new ArrayList<>();
@@ -153,46 +147,48 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
     //main loop that runs the inner game mechanics
     public void playGame(Graphics2D g2d) throws InterruptedException {
-        if (!inGame != true) {
-            showSplash(g2d);    
-        }
-        else{
-            if (dying) {
-                death(g2d);
-            } else {
-                hero.move(g2d);
-                enemy.move(g2d);
-                hero.checkAlive(enemy.getEnemyX(), enemy.getEnemyY());
-                
-                if(ticks > 60){
-                    time = time.minusSeconds(1);
-                    //TODO method to paint time and score
-                    ticks = 0;
-                    score.currentScore+=100;
-                }
-                paintScore(g2d);
-                ticks++;
-                if(time.getSeconds()<= 0){
-                    drawStairs(g2d);
-                    if(hero.checkWin(stairs)){
-                        goToNextLevel();
-                    }
-                }
-                
-                repaint();
-                Thread.sleep(20);
+
+        if (dying) {
+            death(g2d);
+        } else {
+            hero.move(g2d);
+            enemy.move(g2d);
+            hero.checkAlive(enemy.getEnemyX(), enemy.getEnemyY());
+
+            if (ticks > 60) {
+                time = time.minusSeconds(1);
+                //TODO method to paint time and score
+                ticks = 0;
+                score.currentScore += 100;
             }
+            paintScore(g2d);
+            ticks++;
+            if (time.getSeconds() <= 0) {
+                drawStairs(g2d);
+                if (hero.checkWin(stairs)) {
+                    goToNextLevel();
+                }
+            }
+
+            repaint();
+            Thread.sleep(20);
         }
+
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         try {
-            if (inGame != true){
+            if(delay){
+                Thread.sleep(3000);
+                delay = false;
+            }
+            if (inGame == true ){
                 drawBoard((Graphics2D) g);
             } else {
                 showSplash((Graphics2D) g);
+                delay = true;
             }
         } catch (InterruptedException ex) {
 
@@ -264,10 +260,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             default:
                 break;
         }
-        
-        if (key == KeyEvent.VK_ENTER){
-            startGame();
-        }
     }
 
     @Override
@@ -292,7 +284,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     //shows the splash screen bfore entering the game
-    private void showSplash(Graphics2D g2d) {
+    private void showSplash(Graphics2D g2d) throws InterruptedException {
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
         g2d.setColor(Color.red);
@@ -302,7 +294,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.drawString("MINOTAUR", blockSize * 3, blockSize * 2);
         g2d.setFont(fontText);
         g2d.drawString("A Team JAVA Production", blockSize * 3, blockSize * 4);
-        g2d.drawString("   Press Enter To Start",blockSize *3, blockSize * 6);
+        repaint();    
+        inGame = true;
     }
 
     //starts the next level once the level has been won
@@ -317,11 +310,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         enemy.resetPos();
         hero.increaseSpeed();
         enemy.increaseSpeed();
-    }
-
-    private void startGame() {
-        inGame = true;
-        //drawBoard();
     }
     
     //getter and setters
