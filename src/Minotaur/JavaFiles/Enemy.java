@@ -7,12 +7,18 @@ package Minotaur.JavaFiles;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author Steve
  */
 public class Enemy extends MinBaseChar{
+    
+    //images for the hero and minotaur 
+    private Image enemypic;
+    ImageIcon enemyIcon = new ImageIcon(this.getClass().getClassLoader().getResource("res/Minotaur.jpg"));
     
     private final int blockSize = Grid.blockSize;
     
@@ -38,9 +44,7 @@ public class Enemy extends MinBaseChar{
         moveCheckBorders();
         moveCheckInnerWalls();
         
-        g2d.setColor(Color.red);
-        g2d.drawOval(enemyx, enemyy, blockSize, blockSize);
-
+        g2d.drawImage(enemypic, enemyx, enemyy, blockSize, blockSize, null);
     }
     
     public void determineDir(){
@@ -121,5 +125,9 @@ public class Enemy extends MinBaseChar{
     public void resetPos() {
         enemyx = startCoordinateX;
         enemyy = startCoordinateY;
+    }
+    
+    public void loadImage(){
+        enemypic = enemyIcon.getImage();
     }
 }

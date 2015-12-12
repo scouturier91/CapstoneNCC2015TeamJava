@@ -5,8 +5,8 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>Capstone</name>
             <source-roots>
-                <root id="src.Resources.dir"/>
                 <root id="src.dir" name="src"/>
+                <root id="src.res.dir"/>
             </source-roots>
             <test-roots/>
         </data>

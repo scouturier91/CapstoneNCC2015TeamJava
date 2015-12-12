@@ -34,6 +34,8 @@ public abstract class MinBaseChar {
     public abstract void increaseSpeed();
     
     public abstract void resetPos();
+    
+    public abstract void loadImage();
 
     //checks whether the sprite is colliding with a vertical wall inside the maze
     public boolean checkWalls(int x, int y) {

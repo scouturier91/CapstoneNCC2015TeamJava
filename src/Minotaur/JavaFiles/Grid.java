@@ -16,8 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,15 +26,12 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     
     private final String timeString = "PT6S";
     private Duration time = Duration.parse(timeString);
-    private int ticks = 0;
-  
-    //images for the hero and minotaur 
-    public Image heropic;
-    //InputStream heroIS = this.getClass().getClassLoader().getResourceAsStream("src/Minotaur/Resources/hero.jpg");
+    private int ticks = 0; 
+   
+    //image for the stairs
+    public Image stairspic;
+    ImageIcon stairsIcon = new ImageIcon(this.getClass().getClassLoader().getResource("res/stairs.jpg"));
     
-    public ImageIcon hIcon = new ImageIcon();
-    
-    private Image minotaur;
     private Hero hero;
     private Enemy enemy;
 
@@ -144,15 +139,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
     //loads in the images from the resources folder
     public void loadImages() {
-
-        //try {
-        //FileInputStream input = new FileInputStream("hero.jpg");
-        //input.read();
-        heropic = hIcon.getImage();
-        //hero = ImageIO.read(getClass().getResourceAsStream("C:\\Users\\mrswe_000\\Desktop\\code\\CapstoneNCC2015TeamJava\\src\\Minotaur"));
-        // } catch (IOException ex) {
-        //  Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        hero.loadImage();
+        enemy.loadImage();
+        stairspic = stairsIcon.getImage();
 
     }
 
@@ -276,8 +265,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     
     
     private void drawStairs(Graphics2D g2d) {
-        g2d.setColor(Color.blue);
-        g2d.drawRect(stairs.x, stairs.y, stairs.height, stairs.width);
+        g2d.drawImage(stairspic, stairs.x, stairs.y, blockSize, blockSize, null);
     }
 
     @Override

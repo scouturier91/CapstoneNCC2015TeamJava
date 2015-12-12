@@ -7,13 +7,20 @@ package Minotaur.JavaFiles;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author Steve
  */
 public class Hero extends MinBaseChar{
+    
+    //images for the hero and minotaur 
+    public Image heropic;
+    //InputStream heroIS = this.getClass().getClassLoader().getResourceAsStream("src/Minotaur/Resources/hero.jpg");
+    ImageIcon heroIcon = new ImageIcon(this.getClass().getClassLoader().getResource("res/hero.jpg"));
     
     private static final int blockSize = Grid.blockSize;
     
@@ -36,17 +43,13 @@ public class Hero extends MinBaseChar{
     
     Rectangle hero = new Rectangle(herox, heroy, blockSize, blockSize);
     Rectangle enemy = new Rectangle(0, 0, blockSize, blockSize);
-    Rectangle stairs = new Rectangle();//todo
 
     @Override
     public void move(Graphics2D g2d) {
         moveCheckBorders();
         moveCheckInnerWalls();
   
-        //g2d.drawImage(hero, herox, heroy, blockSize, blockSize, this);
-        g2d.setColor(Color.orange);
-        g2d.fillRect(herox, heroy, blockSize, blockSize);
-        //g2d.drawImage(hero, herox, heroy, null);
+        g2d.drawImage(heropic, herox, heroy, blockSize, blockSize, null);
     }
     
     @Override
@@ -120,5 +123,11 @@ public class Hero extends MinBaseChar{
         heroy = startCoordinateY;
     }
 
+    @Override
+    public void loadImage(){
+        heropic = heroIcon.getImage();
+        //heropic.getHeight(this);
+        //heropic.getWidth(this);
+    }
     
 }
