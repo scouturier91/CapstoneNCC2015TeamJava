@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
     //Regex to used to set time then gets passed to Duration 
-    private final String timeString = "PT3S";
+    private final String timeString = "PT10S";
     //keeps track of the time
     private Duration time = Duration.parse(timeString);
     //keeps track of times main loop has been run
@@ -45,7 +45,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     //array that holds all inner walls
     ArrayList<Wall> walls = new ArrayList<>();
 
-    //REctangle object used for stairs
+    //Rectangle object used for stairs
     Rectangle stairs = new Rectangle(blockSize * 4, blockSize * 4, blockSize, blockSize);
    
     //High score object used to hold and sort high scores
@@ -152,9 +152,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             death(g2d);
         } else {
             hero.move(g2d);
-            enemy.move(g2d);
-            hero.checkAlive(enemy.getEnemyX(), enemy.getEnemyY());
-
+            
             if (ticks > 60) {
                 time = time.minusSeconds(1);
                 //TODO method to paint time and score
@@ -169,6 +167,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                     goToNextLevel();
                 }
             }
+            enemy.move(g2d);
+            hero.checkAlive(enemy.getEnemyX(), enemy.getEnemyY());
 
             repaint();
             Thread.sleep(20);
@@ -310,6 +310,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         enemy.resetPos();
         hero.increaseSpeed();
         enemy.increaseSpeed();
+        hero.setHeroChangeX(0);
+        hero.setHeroChangeY(0);
     }
     
     //getter and setters
