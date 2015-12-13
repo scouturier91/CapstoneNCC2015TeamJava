@@ -1,8 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//Capstone Project 2015 
+//Authors: Stephen Couturier, Jeremy Peck, Mike Guilmette
+//Version: 1.0
+//Class for Walls
+
 package Minotaur.JavaFiles;
 
 /**

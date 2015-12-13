@@ -1,8 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//Capstone Project 2015 
+//Authors: Stephen Couturier, Jeremy Peck, Mike Guilmette
+//Version: 1.0
+//Hero Class
+
 package Minotaur.JavaFiles;
 
 import java.awt.Graphics2D;
@@ -69,14 +69,15 @@ public class Hero extends MinBaseChar{
 
     @Override
     public void moveCheckInnerWalls() {
-        if (!checkWalls(herox  + heroChangeInPosX, heroy)
+        if (!checkWalls(herox  + heroChangeInPosX + heroSpeed, heroy)
                 && !checkWalls(herox + heroChangeInPosX, heroy)) {
             herox = herox + heroChangeInPosX * heroSpeed;
         }
-        if (!checkWalls(herox, heroy + heroChangeInPosY)
+        if (!checkWalls(herox, heroy + heroChangeInPosY + heroSpeed)
                 && !checkWalls(herox, heroy + heroChangeInPosY)) {
             heroy = heroy + heroSpeed * heroChangeInPosY;
         }
+
     }
    
     public void checkAlive(int enemyx, int enemyy) {
