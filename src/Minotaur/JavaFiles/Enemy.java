@@ -5,7 +5,6 @@
 
 package Minotaur.JavaFiles;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -23,7 +22,7 @@ public class Enemy extends MinBaseChar{
     private final int blockSize = Grid.blockSize;
     
     private final int startCoordinateX = blockSize * 4;
-    private final int startCoordinateY = blockSize * 6;
+    private final int startCoordinateY = blockSize * 7;
     //x and y coordinates of the enemy
     private int enemyx = startCoordinateX;
     private int enemyy = startCoordinateY;

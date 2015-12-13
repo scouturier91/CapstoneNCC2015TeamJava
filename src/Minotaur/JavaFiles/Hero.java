@@ -5,7 +5,6 @@
 
 package Minotaur.JavaFiles;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -39,7 +38,7 @@ public class Hero extends MinBaseChar{
     private static int heroChangeInDirX;
     private static int heroChangeInDirY;
     //speed of the hero
-    private int heroSpeed = 3;
+    private int heroSpeed = 4;
     
     Rectangle hero = new Rectangle(herox, heroy, blockSize, blockSize);
     Rectangle enemy = new Rectangle(0, 0, blockSize, blockSize);
@@ -70,14 +69,15 @@ public class Hero extends MinBaseChar{
 
     @Override
     public void moveCheckInnerWalls() {
-        if (!checkWalls(herox  + heroChangeInPosX, heroy)
+        if (!checkWalls(herox  + heroChangeInPosX + heroSpeed, heroy)
                 && !checkWalls(herox + heroChangeInPosX, heroy)) {
             herox = herox + heroChangeInPosX * heroSpeed;
         }
-        if (!checkWalls(herox, heroy + heroChangeInPosY)
+        if (!checkWalls(herox, heroy + heroChangeInPosY + heroSpeed)
                 && !checkWalls(herox, heroy + heroChangeInPosY)) {
             heroy = heroy + heroSpeed * heroChangeInPosY;
         }
+
     }
    
     public void checkAlive(int enemyx, int enemyy) {
@@ -126,8 +126,6 @@ public class Hero extends MinBaseChar{
     @Override
     public void loadImage(){
         heropic = heroIcon.getImage();
-        //heropic.getHeight(this);
-        //heropic.getWidth(this);
     }
     
 }
