@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Grid extends JPanel implements ActionListener, KeyListener {
+    JFrame gameFrame;
     //Regex to used to set time then gets passed to Duration 
     private final String timeString = "PT10S";
     //keeps track of the time
@@ -72,7 +73,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             };
 
     //default constuctor called on game startup
-    public Grid() {
+    public Grid(JFrame jf) {
+        gameFrame = jf;
         hero = new Hero();
         enemy = new Enemy();
         loadImages();
@@ -224,6 +226,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.drawString("Game Over ", BLOCK_SIZE * 4, BLOCK_SIZE);
         g2d.drawString("Your Score: " + score.getCurrentScore(), BLOCK_SIZE * 4, BLOCK_SIZE + 20);
         score.showHighScores(g2d);
+        g2d.drawString("Press R to restart", BLOCK_SIZE * 4, BLOCK_SIZE * 8);
     }
     
     //draws the stairs once the time is up
@@ -263,6 +266,11 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 break;
             default:
                 break;
+        }
+        if(key == KeyEvent.VK_R){
+            gameFrame.removeAll();
+            gameFrame.validate();
+            Minotaur min = new Minotaur();           
         }
     }
 
