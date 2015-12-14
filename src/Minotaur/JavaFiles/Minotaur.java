@@ -13,10 +13,10 @@ import javax.swing.JFrame;
 public class Minotaur extends JFrame {
     public Minotaur() {
         JFrame jf = new JFrame("Minotaur");
-        jf.add(new Grid());
-        jf.setLocationRelativeTo(null);
+        jf.add(new Grid());      
         jf.setSize(Grid.getScreenSize() + 10, Grid.getScreenSize() + 40);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        jf.setLocationRelativeTo(null);
         jf.setVisible(true);
 
     }

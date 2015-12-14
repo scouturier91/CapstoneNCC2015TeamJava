@@ -58,7 +58,6 @@ public abstract class MinBaseChar {
                     return true;
                 }
             }
-            System.out.println(x + " " + y);
         }
         return false;
     }
