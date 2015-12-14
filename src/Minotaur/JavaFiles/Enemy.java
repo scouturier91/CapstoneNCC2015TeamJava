@@ -82,8 +82,7 @@ public class Enemy extends MinBaseChar{
     }
 
     public void moveCheckInnerWalls() {
-        if (!checkWalls(enemyx + enemyChangeInPosX, enemyy)
-                && !checkWalls(enemyx + enemyChangeInPosX, enemyy)) {
+        if (!checkWalls(enemyx + enemyChangeInPosX * enemySpeed, enemyy)) {
             enemyx = enemyx + enemyChangeInPosX * enemySpeed;
 
         } else {
@@ -95,8 +94,7 @@ public class Enemy extends MinBaseChar{
             }
 
         }
-        if (!checkWalls(enemyx, enemyy + enemyChangeInPosY)
-                && !checkWalls(enemyx, enemyy + enemyChangeInPosY)) {
+        if (!checkWalls(enemyx, enemyy + enemyChangeInPosY * enemySpeed)) {
             enemyy = enemyy + enemySpeed * enemyChangeInPosY;
         } else {
             enemyChangeInPosY = 0;

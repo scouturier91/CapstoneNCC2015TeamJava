@@ -156,7 +156,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         } else {          
             if (ticks > 60) {
                 time = time.minusSeconds(1);
-                //TODO method to paint time and score
                 ticks = 0;
                 if (levelScore < 1200) {
                     score.addToCurrentScore(100);

@@ -69,12 +69,10 @@ public class Hero extends MinBaseChar{
 
     @Override
     public void moveCheckInnerWalls() {
-        if (!checkWalls(herox  + heroChangeInPosX + heroSpeed, heroy)
-                && !checkWalls(herox + heroChangeInPosX, heroy)) {
+        if (!checkWalls(herox  + heroChangeInPosX * heroSpeed, heroy)) {
             herox = herox + heroChangeInPosX * heroSpeed;
         }
-        if (!checkWalls(herox, heroy + heroChangeInPosY + heroSpeed)
-                && !checkWalls(herox, heroy + heroChangeInPosY)) {
+        if (!checkWalls(herox, heroy + heroChangeInPosY * heroSpeed)) {
             heroy = heroy + heroSpeed * heroChangeInPosY;
         }
 
