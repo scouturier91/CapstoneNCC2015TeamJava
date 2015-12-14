@@ -4,7 +4,9 @@
 //Minotaur Class
 package Minotaur.JavaFiles;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 /**
  *
@@ -12,8 +14,10 @@ import javax.swing.JFrame;
  */
 public class Minotaur extends JFrame {
     public Minotaur() {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         JFrame jf = new JFrame("Minotaur");
         jf.add(new Grid());
+        jf.setLocationRelativeTo(null);
         jf.setSize(Grid.screenSize + 10, Grid.screenSize + 40);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
         jf.setVisible(true);
