@@ -108,9 +108,11 @@ public class Enemy extends MinBaseChar{
         }
     }
     
+    @Override
     public int getX(){
         return enemyx;
     }
+    @Override
     public int getY(){
         return enemyy;
     }
