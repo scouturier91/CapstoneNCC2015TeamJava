@@ -31,6 +31,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     //character objects
     private Hero hero;
     private Enemy enemy;
+    
+    //used to limit max amount scored per round
+    private int levelScore = 0;
 
     //standardizes values for screen and block sizes and screen dimensions
     public static final int BLOCK_SIZE = 50;
@@ -155,7 +158,10 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 time = time.minusSeconds(1);
                 //TODO method to paint time and score
                 ticks = 0;
-                score.addToCurrentScore(100);
+                if (levelScore < 1200) {
+                    score.addToCurrentScore(100);
+                    levelScore += 100;
+                }
             }
             paintScore(g2d);
             ticks++;
@@ -305,6 +311,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
         }
         time = Duration.parse(timeString);
+        levelScore = 0;
         hero.resetPos();
         enemy.resetPos();
         hero.increaseSpeed();
