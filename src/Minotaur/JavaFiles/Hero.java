@@ -21,7 +21,7 @@ public class Hero extends MinBaseChar{
     //InputStream heroIS = this.getClass().getClassLoader().getResourceAsStream("src/Minotaur/Resources/hero.jpg");
     ImageIcon heroIcon = new ImageIcon(this.getClass().getClassLoader().getResource("res/hero.jpg"));
     
-    private static final int blockSize = Grid.blockSize;
+    private static final int blockSize = Grid.BLOCK_SIZE;
     
     private static final int startCoordinateX =  blockSize * 4;
     private static final int startCoordinateY =  blockSize;
@@ -96,11 +96,21 @@ public class Hero extends MinBaseChar{
         return false;
     }
     
-    public static int getHeroX(){
+    @Override
+    public int getX(){
         return herox;
     }
     
-    public static int getHeroY(){
+    @Override
+    public int getY(){
+        return heroy;
+    }
+    
+    public static int getStaticX(){
+        return herox;
+    }
+    
+    public static int getStaticY(){
         return heroy;
     }
     

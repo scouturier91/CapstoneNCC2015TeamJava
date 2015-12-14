@@ -94,10 +94,10 @@ public class HighScore {
             // SORTS THE LIST THEN DISPLAYS IT
             Collections.sort(scores, new AlphanumComparator());
             Collections.reverse(scores);
-            g2d.drawString("TOP 10 SCORES", Grid.getBlockSize() * 4, Grid.getBlockSize() + 80);
-            int score_pos = Grid.getBlockSize() + 100;
+            g2d.drawString("TOP 10 SCORES", Grid.getBLOCK_SIZE() * 4, Grid.getBLOCK_SIZE() + 80);
+            int score_pos = Grid.getBLOCK_SIZE() + 100;
             for (int i = 0; i < 10; i++) {
-                g2d.drawString(i + 1 + ": " + scores.get(i), Grid.getBlockSize() * 4, score_pos);
+                g2d.drawString(i + 1 + ": " + scores.get(i), Grid.getBLOCK_SIZE() * 4, score_pos);
                 score_pos = score_pos + 20;
             }
             out = new BufferedWriter(new FileWriter("scores.txt"));

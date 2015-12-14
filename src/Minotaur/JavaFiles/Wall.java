@@ -22,6 +22,7 @@ public class Wall {
         this.hor = horz;
     }
     
+    //getters and setters
     public boolean isHorz(){
         return hor;
     }

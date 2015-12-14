@@ -19,7 +19,7 @@ public class Enemy extends MinBaseChar{
     private Image enemypic;
     ImageIcon enemyIcon = new ImageIcon(this.getClass().getClassLoader().getResource("res/Minotaur.jpg"));
     
-    private final int blockSize = Grid.blockSize;
+    private final int blockSize = Grid.BLOCK_SIZE;
     
     private final int startCoordinateX = blockSize * 4;
     private final int startCoordinateY = blockSize * 7;
@@ -50,16 +50,16 @@ public class Enemy extends MinBaseChar{
         enemyChangeInDirX = 0;
         enemyChangeInDirY = 0;
 
-        if (Hero.getHeroX() > enemyx) {
+        if (Hero.getStaticX() > enemyx) {
             enemyChangeInDirX = 1;
-        } else if (Hero.getHeroX() < enemyx) {
+        } else if (Hero.getStaticX() < enemyx) {
             enemyChangeInDirX = -1;
         }
 
         if (enemyChangeInDirX == 0) {
-            if (Hero.getHeroY() > enemyy) {
+            if (Hero.getStaticY() > enemyy) {
                 enemyChangeInDirY = 1;
-            } else if (Hero.getHeroY() < enemyy) {
+            } else if (Hero.getStaticY() < enemyy) {
                 enemyChangeInDirY = -1;
             }
         }
@@ -88,7 +88,7 @@ public class Enemy extends MinBaseChar{
 
         } else {
             enemyChangeInPosX = 0;
-            if (enemyy <= Hero.getHeroY()){
+            if (enemyy <= Hero.getStaticY()){
                 enemyy = enemyy + 1 * enemySpeed;
             }else {
                 enemyy = enemyy -1 * enemySpeed;
@@ -100,7 +100,7 @@ public class Enemy extends MinBaseChar{
             enemyy = enemyy + enemySpeed * enemyChangeInPosY;
         } else {
             enemyChangeInPosY = 0;
-            if (enemyx <= Hero.getHeroX()){
+            if (enemyx <= Hero.getStaticX()){
                 enemyx = enemyx + 1 * enemySpeed;
             }else {
                 enemyx = enemyx - 1 * enemySpeed;
@@ -108,10 +108,10 @@ public class Enemy extends MinBaseChar{
         }
     }
     
-    public int getEnemyX(){
+    public int getX(){
         return enemyx;
     }
-    public int getEnemyY(){
+    public int getY(){
         return enemyy;
     }
 

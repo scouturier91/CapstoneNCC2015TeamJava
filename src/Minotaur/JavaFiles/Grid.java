@@ -33,9 +33,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private Enemy enemy;
 
     //standardizes values for screen and block sizes and screen dimensions
-    public static final int blockSize = 50;
+    public static final int BLOCK_SIZE = 50;
     private static final int numOfBlocks = 9;
-    private static final int screenSize = numOfBlocks * blockSize;
+    private static final int screenSize = numOfBlocks * BLOCK_SIZE;
     private static Dimension dim = new Dimension(screenSize, screenSize);
     
     //checks to see whether the hero is still alive
@@ -47,7 +47,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     ArrayList<Wall> walls = new ArrayList<>();
 
     //Rectangle object used for stairs
-    Rectangle stairs = new Rectangle(blockSize * 4, blockSize * 4, blockSize, blockSize);
+    Rectangle stairs = new Rectangle(BLOCK_SIZE * 4, BLOCK_SIZE * 4, BLOCK_SIZE, BLOCK_SIZE);
    
     //High score object used to hold and sort high scores
     HighScore score = new HighScore();
@@ -99,11 +99,11 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         for (int i = 0; i < screenData.length; i++) {
             for (int j = 0; j < screenData.length; j++) {
                 if (screenData[j][i] == 1) {
-                    Wall wall = new Wall(i * blockSize, j * blockSize , false);
+                    Wall wall = new Wall(i * BLOCK_SIZE, j * BLOCK_SIZE , false);
                     walls.add(wall);
                     
                 } else if (screenData[j][i] == 3) {
-                    Wall wall = new Wall(i * blockSize, j * blockSize , true);
+                    Wall wall = new Wall(i * BLOCK_SIZE, j * BLOCK_SIZE , true);
                     walls.add(wall);
                 }
             }
@@ -121,15 +121,15 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                 switch (screenData[j][i]) {
                     case 2:
                         g.setColor(Color.red);
-                        g.fillRect(i * blockSize, j * blockSize, blockSize, blockSize);
+                        g.fillRect(i * BLOCK_SIZE, j * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                         break;
                     case 1:
                         g.setColor(Color.green);
-                        g.drawLine((i * blockSize) + blockSize / 2, j * blockSize, (i * blockSize) + blockSize / 2, (j * blockSize) + blockSize);
+                        g.drawLine((i * BLOCK_SIZE) + BLOCK_SIZE / 2, j * BLOCK_SIZE, (i * BLOCK_SIZE) + BLOCK_SIZE / 2, (j * BLOCK_SIZE) + BLOCK_SIZE);
                         break;
                     case 3:
                         g.setColor(Color.green);
-                        g.drawLine(i * blockSize, j * blockSize, (i * blockSize) + blockSize, j * blockSize);
+                        g.drawLine(i * BLOCK_SIZE, j * BLOCK_SIZE, (i * BLOCK_SIZE) + BLOCK_SIZE, j * BLOCK_SIZE);
                         break;
                     default:
                         break;
@@ -167,7 +167,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
             }
             hero.move(g2d);
             enemy.move(g2d);
-            hero.checkAlive(enemy.getEnemyX(), enemy.getEnemyY());
+            hero.checkAlive(enemy.getX(), enemy.getY());
 
             repaint();
             Thread.sleep(20);
@@ -216,14 +216,14 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, dim.width, dim.height);
         g2d.setColor(Color.white);
-        g2d.drawString("Game Over ", blockSize * 4, blockSize);
-        g2d.drawString("Your Score: " + score.getCurrentScore(), blockSize * 4, blockSize + 20);
+        g2d.drawString("Game Over ", BLOCK_SIZE * 4, BLOCK_SIZE);
+        g2d.drawString("Your Score: " + score.getCurrentScore(), BLOCK_SIZE * 4, BLOCK_SIZE + 20);
         score.showHighScores(g2d);
     }
     
     //draws the stairs once the time is up
     private void drawStairs(Graphics2D g2d) {
-        g2d.drawImage(stairspic, stairs.x, stairs.y, blockSize, blockSize, null);
+        g2d.drawImage(stairspic, stairs.x, stairs.y, BLOCK_SIZE, BLOCK_SIZE, null);
     }
 
     @Override
@@ -276,9 +276,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private void paintScore(Graphics2D g2d) {
         g2d.setColor(Color.white);
         if (time.getSeconds() >= 0) {
-            g2d.drawString("Score: " + score.getCurrentScore() + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
+            g2d.drawString("Score: " + score.getCurrentScore() + "pts         Time: " + time.getSeconds() + "s", BLOCK_SIZE, BLOCK_SIZE/2);
         } else {          
-            g2d.drawString("Score: " + score.getCurrentScore() + "pts         Time: 0s", blockSize, blockSize/2);
+            g2d.drawString("Score: " + score.getCurrentScore() + "pts         Time: 0s", BLOCK_SIZE, BLOCK_SIZE/2);
         }
     }
 
@@ -290,9 +290,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         Font fontText = new Font("Helvetica", Font.PLAIN, 15);
         Font fontTitle = new Font("Helvetica", Font.BOLD, 30);
         g2d.setFont(fontTitle);
-        g2d.drawString("MINOTAUR", blockSize * 3, blockSize * 2);
+        g2d.drawString("MINOTAUR", BLOCK_SIZE * 3, BLOCK_SIZE * 2);
         g2d.setFont(fontText);
-        g2d.drawString("A Team JAVA Production", blockSize * 3, blockSize * 4);
+        g2d.drawString("A Team JAVA Production", BLOCK_SIZE * 3, BLOCK_SIZE * 4);
         repaint();    
         inGame = true;
     }
@@ -322,8 +322,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         Grid.dying = dying;
     }
     
-    public static int getBlockSize(){
-        return blockSize;
+    public static int getBLOCK_SIZE(){
+        return BLOCK_SIZE;
     }
     
     public static int getScreenSize(){

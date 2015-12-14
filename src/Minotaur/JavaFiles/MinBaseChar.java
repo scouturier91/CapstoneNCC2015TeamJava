@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public abstract class MinBaseChar {
 
-    private final int blockSize = Grid.blockSize;
     /**
      * the move interface for the sprites
      * @param g2d the graphics object 
@@ -24,6 +23,10 @@ public abstract class MinBaseChar {
     
     //List of walls used to determine collisions
     private ArrayList<Wall> walls = new ArrayList<>();
+    
+    public abstract int getX();
+    
+    public abstract int getY();
     
     public abstract void move(Graphics2D g2d);
     
@@ -39,18 +42,18 @@ public abstract class MinBaseChar {
 
     //checks whether the sprite is colliding with a vertical wall inside the maze
     public boolean checkWalls(int x, int y) {
-        Rectangle sprite = new Rectangle(x, y, blockSize, blockSize);
+        Rectangle sprite = new Rectangle(x, y, Grid.BLOCK_SIZE, Grid.BLOCK_SIZE);
         for (int i = 0; i < walls.size(); i++) {
             if (walls.get(i).isHorz()) {
                 Line2D line = new Line2D.Float(walls.get(i).getX(), walls.get(i).getY(),
-                        walls.get(i).getX() + blockSize, walls.get(i).getY());
+                        walls.get(i).getX() + Grid.BLOCK_SIZE, walls.get(i).getY());
                 if (line.intersects(sprite)) {
                     return true;
                 }
             }
             if(!walls.get(i).isHorz()){
-                Line2D line2 = new Line2D.Float(walls.get(i).getX()+ blockSize/2, walls.get(i).getY(),
-                        walls.get(i).getX() + blockSize/2, walls.get(i).getY() + blockSize);
+                Line2D line2 = new Line2D.Float(walls.get(i).getX()+ Grid.BLOCK_SIZE/2, walls.get(i).getY(),
+                        walls.get(i).getX() + Grid.BLOCK_SIZE/2, walls.get(i).getY() + Grid.BLOCK_SIZE);
                 if (line2.intersects(sprite)) {
                     return true;
                 }
