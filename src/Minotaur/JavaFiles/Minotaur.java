@@ -15,7 +15,7 @@ public class Minotaur extends JFrame {
         JFrame jf = new JFrame("Minotaur");
         jf.add(new Grid());
         jf.setLocationRelativeTo(null);
-        jf.setSize(Grid.screenSize + 10, Grid.screenSize + 40);
+        jf.setSize(Grid.getScreenSize() + 10, Grid.getScreenSize() + 40);
         jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
         jf.setVisible(true);
 

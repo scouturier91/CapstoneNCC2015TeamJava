@@ -25,7 +25,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private int ticks = 0; 
    
     //image for the stairs
-    public Image stairspic;
+    private Image stairspic;
     ImageIcon stairsIcon = new ImageIcon(this.getClass().getClassLoader().getResource("res/stairs.jpg"));
     
     //character objects
@@ -35,7 +35,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     //standardizes values for screen and block sizes and screen dimensions
     public static final int blockSize = 50;
     private static final int numOfBlocks = 9;
-    public static final int screenSize = numOfBlocks * blockSize;
+    private static final int screenSize = numOfBlocks * blockSize;
     private static Dimension dim = new Dimension(screenSize, screenSize);
     
     //checks to see whether the hero is still alive
@@ -114,7 +114,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     //draws the map
-    public void drawMap(Graphics2D g) {
+    private void drawMap(Graphics2D g) {
         for (int i = 0; i < screenData.length; i++) {
             for (int j = 0; j < screenData.length; j++) {
                 g.setColor(Color.green);
@@ -139,7 +139,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     //loads in the images from the resources folder
-    public void loadImages() {
+    private void loadImages() {
         hero.loadImage();
         enemy.loadImage();
         stairspic = stairsIcon.getImage();
@@ -147,18 +147,15 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     //main loop that runs the inner game mechanics
-    public void playGame(Graphics2D g2d) throws InterruptedException {
-
+    private void playGame(Graphics2D g2d) throws InterruptedException {
         if (dying) {
             death(g2d);
-        } else {
-            hero.move(g2d);
-            
+        } else {          
             if (ticks > 60) {
                 time = time.minusSeconds(1);
                 //TODO method to paint time and score
                 ticks = 0;
-                score.currentScore += 100;
+                score.addToCurrentScore(100);
             }
             paintScore(g2d);
             ticks++;
@@ -168,6 +165,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
                     goToNextLevel();
                 }
             }
+            hero.move(g2d);
             enemy.move(g2d);
             hero.checkAlive(enemy.getEnemyX(), enemy.getEnemyY());
 
@@ -198,7 +196,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     }
 
     //main loop that draws all components
-    public void drawBoard(Graphics2D g2d) throws InterruptedException {
+    private void drawBoard(Graphics2D g2d) throws InterruptedException {
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, dim.width, dim.height);
         drawMap(g2d);
@@ -219,7 +217,7 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         g2d.fillRect(0, 0, dim.width, dim.height);
         g2d.setColor(Color.white);
         g2d.drawString("Game Over ", blockSize * 4, blockSize);
-        g2d.drawString("Your Score: " + score.currentScore, blockSize * 4, blockSize + 20);
+        g2d.drawString("Your Score: " + score.getCurrentScore(), blockSize * 4, blockSize + 20);
         score.showHighScores(g2d);
     }
     
@@ -278,9 +276,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     private void paintScore(Graphics2D g2d) {
         g2d.setColor(Color.white);
         if (time.getSeconds() >= 0) {
-            g2d.drawString("Score: " + score.currentScore + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
+            g2d.drawString("Score: " + score.getCurrentScore() + "pts         Time: " + time.getSeconds() + "s", blockSize, blockSize/2);
         } else {          
-            g2d.drawString("Score: " + score.currentScore + "pts         Time: 0s", blockSize, blockSize/2);
+            g2d.drawString("Score: " + score.getCurrentScore() + "pts         Time: 0s", blockSize, blockSize/2);
         }
     }
 
@@ -326,5 +324,9 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
     
     public static int getBlockSize(){
         return blockSize;
+    }
+    
+    public static int getScreenSize(){
+        return screenSize;
     }
 }

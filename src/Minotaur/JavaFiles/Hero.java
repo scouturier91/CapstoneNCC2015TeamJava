@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 public class Hero extends MinBaseChar{
     
     //images for the hero and minotaur 
-    public Image heropic;
+    private Image heropic;
     //InputStream heroIS = this.getClass().getClassLoader().getResourceAsStream("src/Minotaur/Resources/hero.jpg");
     ImageIcon heroIcon = new ImageIcon(this.getClass().getClassLoader().getResource("res/hero.jpg"));
     

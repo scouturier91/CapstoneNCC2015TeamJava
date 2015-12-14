@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class HighScore {
     LinkedList<String> scores = new LinkedList<String>();
-    public int currentScore;
+    private int currentScore;
     
     // Constructor creates a File f then checks to see if it exists
     // Also initializes the currentScore variable to 0
@@ -28,7 +28,7 @@ public class HighScore {
     }
 
     //Checks to see if scores.txt exists, if not createFile is called	
-    public static void checkFile(File f) throws FileNotFoundException{
+    private static void checkFile(File f) throws FileNotFoundException{
         if (!f.exists()){
             createFile(f);
 	}
@@ -38,7 +38,7 @@ public class HighScore {
     }
 
     //Creates a blank (ten 0s) scores.txt
-    public static void createFile(File f) throws FileNotFoundException{
+    private static void createFile(File f) throws FileNotFoundException{
         try{
 	PrintWriter outFile = new PrintWriter(f);
 	for (int i = 0; i < 10; i++){
@@ -51,7 +51,7 @@ public class HighScore {
     }
 
     // Create the Linked List using the contents of C:\scores.txt	
-    public static void file2list(LinkedList<String> scores) throws IOException{
+    private static void file2list(LinkedList<String> scores) throws IOException{
 		
         //Initialize fileRead
         BufferedReader fileRead = null;
@@ -114,5 +114,17 @@ public class HighScore {
                 Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }    
+    }
+    
+    public void clearHighScores(File f){
+        f.delete();
+    }
+
+    public void addToCurrentScore(int score){
+        currentScore += score;
+    }
+    
+    public int getCurrentScore(){
+        return currentScore;
+    }
 }
