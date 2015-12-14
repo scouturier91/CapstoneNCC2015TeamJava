@@ -14,7 +14,6 @@ import javax.swing.JFrame;
  */
 public class Minotaur extends JFrame {
     public Minotaur() {
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         JFrame jf = new JFrame("Minotaur");
         jf.add(new Grid());
         jf.setLocationRelativeTo(null);
