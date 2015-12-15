@@ -77,6 +77,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         gameFrame = jf;
         hero = new Hero();
         enemy = new Enemy();
+        inGame = false;
+        dying = false;
         loadImages();
         addKeyListener(this);
 
@@ -153,31 +155,33 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
     //main loop that runs the inner game mechanics
     private void playGame(Graphics2D g2d) throws InterruptedException {
-        if (dying) {
-            death(g2d);
-        } else {          
-            if (ticks > 60) {
-                time = time.minusSeconds(1);
-                ticks = 0;
-                if (levelScore < 1200) {
-                    score.addToCurrentScore(100);
-                    levelScore += 100;
+        if (inGame == true) {
+            if (dying) {
+                death(g2d);
+            } else {
+                if (ticks > 60) {
+                    time = time.minusSeconds(1);
+                    ticks = 0;
+                    if (levelScore < 1200) {
+                        score.addToCurrentScore(100);
+                        levelScore += 100;
+                    }
                 }
-            }
-            paintScore(g2d);
-            ticks++;
-            if (time.getSeconds() <= 0) {
-                drawStairs(g2d);
-                if (hero.checkWin(stairs)) {
-                    goToNextLevel();
+                paintScore(g2d);
+                ticks++;
+                if (time.getSeconds() <= 0) {
+                    drawStairs(g2d);
+                    if (hero.checkWin(stairs)) {
+                        goToNextLevel();
+                    }
                 }
-            }
-            hero.move(g2d);
-            enemy.move(g2d);
-            hero.checkAlive(enemy.getX(), enemy.getY());
+                hero.move(g2d);
+                enemy.move(g2d);
+                hero.checkAlive(enemy.getX(), enemy.getY());
 
-            repaint();
-            Thread.sleep(20);
+                repaint();
+                Thread.sleep(20);
+            }
         }
 
     }
@@ -236,10 +240,6 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_SPACE){
-            inGame = true;
-            System.out.println("str");
-        }
     }
 
     @Override
@@ -270,7 +270,8 @@ public class Grid extends JPanel implements ActionListener, KeyListener {
         if(key == KeyEvent.VK_R){
             gameFrame.removeAll();
             gameFrame.validate();
-            Minotaur min = new Minotaur();           
+            hero.resetPos();
+            Minotaur min = new Minotaur();              
         }
     }
 
